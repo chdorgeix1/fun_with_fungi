@@ -1,80 +1,35 @@
+import numpy as np
+import sys
+np.set_printoptions(threshold=sys.maxsize)
+import time
+arr_size = 20
+x = np.zeros((arr_size,arr_size))
 
-import turtle
+y = 1
 
-myPen = turtle.Turtle()
-#myPen.tracer(0)
-myPen.speed(0)
-myPen.color("#000000")
+def print_array(x):
+    for line in x:
+        print(line)
 
+print_array(x)
 
-# This function draws a box by drawing each side of the square and using the fill function
-def box(intDim):
-    myPen.begin_fill()
-    # 0 deg.
-    myPen.forward(intDim)
-    myPen.left(90)
-    # 90 deg.
-    myPen.forward(intDim)
-    myPen.left(90)
-    # 180 deg.
-    myPen.forward(intDim)
-    myPen.left(90)
-    # 270 deg.
-    myPen.forward(intDim)
-    myPen.end_fill()
-    myPen.setheading(0)
-	
-boxSize = 10	
-#Position myPen in top left area of the screen
-myPen.penup()
-myPen.forward(-100)
-myPen.setheading(90)
-myPen.forward(100)
-myPen.setheading(0)
+target_num = [5, 16]
 
-##Here is an example of how to draw a box	
-#box(boxSize)
+for i in range(10):
+    for p in range(10):
+        if i < 3:
+            a = (np.random.randint(0,6))
+            b = (np.random.randint(0,6))
+        else:
+            a = (np.random.randint(0,6)) - 3
+            b = (np.random.randint(0,6)) - 3
+        #if ((i + a) <= arr_size and (i + a) >= 0) and ((i + b) <= arr_size and (i + b) >= 0): 
+            #for j in zip(range(a), range(b)):
+        x[np.abs(target_num[0] - i) + i/2][np.abs(target_num[0] - i) + i/2] = y
 
-##Here are some instructions on how to move "myPen" around before drawing a box.
-#myPen.setheading(0) #point to the right, 90 to go up, 180 to go to the left 270 to go down
-#myPen.penup()
-#myPen.forward(boxSize)
-#myPen.pendown()
+                #x[i + j[0]][i] = y
+                #x[i][i + j[0]] = y
 
-#Here is how your PixelArt is stored (using a "list of lists")
-
-pixels     = [[0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0]]
-pixels.append([0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0])
-pixels.append([0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0])
-pixels.append([0,1,1,0,1,1,0,0,0,0,1,1,0,1,1,0])
-pixels.append([0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0])
-pixels.append([1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1])
-pixels.append([1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1])
-pixels.append([1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1])
-pixels.append([1,1,1,0,0,1,1,1,1,1,1,0,0,1,1,1])
-pixels.append([1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1])
-pixels.append([1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1])
-pixels.append([1,1,1,1,0,0,1,0,0,1,0,0,1,1,1,1])
-pixels.append([0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0])
-pixels.append([0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0])
-pixels.append([0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0])
-pixels.append([0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0])
-
-
-for i in range (0,len(pixels)):
-    for j in range (0,len(pixels[i])):
-	    if pixels[i][j]==1:
-             box(boxSize)
-    myPen.penup()
-    myPen.forward(boxSize)
-    myPen.pendown()	
-    myPen.setheading(270) 
-    myPen.penup()
-    myPen.forward(boxSize)
-    myPen.setheading(180) 
-    myPen.forward(boxSize*len(pixels[i]))
-    myPen.setheading(0)
-    myPen.pendown()
-	
-myPen.getscreen().update()	
-	
+        print_array(x)
+        print('')
+        time.sleep(1)
