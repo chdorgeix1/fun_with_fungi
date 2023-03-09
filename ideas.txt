@@ -22,5 +22,16 @@ More efficient per unit spread
 Expensive Reproduction
 Bacteria?
 
+Evolution:
+-Increased Growth Rate
+-Increased Defense
+-Increased Offense
+-Steal Evolutions(DNA Stealing)
+-Absorbing Slime Mold
+-Increased Nutrient Uptake
+-Random Mutations? (Acid burn, reduced nutrients from area taken from this species)
+
+
+
 Kinds of Foods:
 Base forest floor/petri dish 
