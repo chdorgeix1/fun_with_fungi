@@ -1,0 +1,26 @@
+Petri Dish or Forest Floor
+
+Win conditions: 
+Eat all of the other growths
+Reproduce
+
+Kinds of growths:
+Slime Mold
+Capable of consuming foods or if the food is a slime mold incorporating them
+Spread Quickly?
+Less efficient but faster spread
+Medium Reproduction
+Mold(Fungal Mycelium)
+Capable of consuming foods
+Spread Slowly
+More efficient per unit spread
+Cheap Reproduction
+Mushroom(Fungal Mycelium)
+Capable of consuming foods
+Spread Slowly
+More efficient per unit spread
+Expensive Reproduction
+Bacteria?
+
+Kinds of Foods:
+Base forest floor/petri dish 
