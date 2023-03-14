@@ -29,8 +29,10 @@ def Main3():
 
     # Object class
     class Sprite(pygame.sprite.Sprite):
-        def __init__(self, color, trail, height, width):
+        def __init__(self, color, trail, height, width, clone = False):
             super().__init__()
+
+            self.clone = clone
             self.color = color
             self.trail = trail
             self.width = width
@@ -47,8 +49,17 @@ def Main3():
                             color,
                             pygame.Rect(0, 0, width, height))
 
-            self.rect = self.image.get_rect()            
+            self.rect = self.image.get_rect()    
 
+        def getColors(self):
+            return [self.color, self.trail]
+
+        def getX(self):
+            return self.rect.x
+        
+        def getY(self):
+            return self.rect.y
+        
         def moveRight(self, pixels):
             pygame.draw.rect(sample_surface, self.trail,
                             pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
@@ -68,30 +79,42 @@ def Main3():
             pygame.draw.rect(sample_surface, self.trail,
                             pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
             self.rect.y -= pixels
-
+          
+    
+    def clone(cloned_sprite):
+        new_sprite = Sprite(cloned_sprite.getColors()[0], cloned_sprite.getColors()[1], 20, 20)
+        all_sprites_list.add(new_sprite)
+        new_sprite.rect.x =  cloned_sprite.getX()
+        new_sprite.rect.y = cloned_sprite.getY()
+        return new_sprite
+    
     pygame.init()
  
- 
+    
     RED = (255, 0, 0)
-    ORANGE = (255, 150, 0)
+    ORANGE = (255, 100, 0)
+
+    BLUE = (0, 0, 255)
+    GREENISHBLUE = (0, 255, 255)
     
     size = (display_size, display_size)
     #screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Creating Sprite")
     
-    
     all_sprites_list = pygame.sprite.Group()
-    
     playerCar = Sprite(RED, ORANGE, 20, 20)
     playerCar.rect.x = 2
     playerCar.rect.y = 2
     
-    
     all_sprites_list.add(playerCar)
-    
+
+    playerCar2 = clone(playerCar)
+
+    print(playerCar2 in all_sprites_list)
+
     exit = True
     clock = pygame.time.Clock()
-    
+
     while exit:
         #print('here')
         color_count = 0
@@ -99,7 +122,7 @@ def Main3():
             for y in range(5, 442, 22):
                 if sample_surface.get_at((x,y))[0:3] == (0,0,0):
                     color_count += 1
-        print(color_count)
+        #print(color_count)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -117,6 +140,17 @@ def Main3():
             playerCar.moveForward(22)
         if keys[pygame.K_UP]  and playerCar.rect.y > 2:
             playerCar.moveBack(22)
+        
+        if playerCar2 in all_sprites_list:
+            keys2 = pygame.key.get_pressed()
+            if keys2[pygame.K_a] and playerCar2.rect.x > 2:
+                playerCar2.moveLeft(22)
+            if keys2[pygame.K_d] and playerCar2.rect.x < 420:
+                playerCar2.moveRight(22)
+            if keys2[pygame.K_s] and playerCar2.rect.y < 420:
+                playerCar2.moveForward(22)
+            if keys2[pygame.K_w]  and playerCar2.rect.y > 2:
+                playerCar2.moveBack(22)
     
         all_sprites_list.update()
         #sample_surface.fill((200, 200, 200))
