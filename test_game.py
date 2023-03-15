@@ -3,7 +3,84 @@ import pygame
 import random
 
 # initializing imported module
-pygame.init()
+#pygame.init()
+def testMain():
+
+    world_color = (0,0,0)
+    world_dimensions = [500, 500]
+    sprite_size = [50, 50]
+    sample_surface = pygame.display.set_mode((world_dimensions[0],world_dimensions[1]))
+    
+    sample_surface.fill(world_color)
+
+    class Sprite(pygame.sprite.Sprite):
+        def __init__(self, color, height, width, x_loc, y_loc):
+            super().__init__()
+            
+            self.color = color
+            self.width = width
+            self.height = height
+            self.image = pygame.Surface([width, height])
+            #self.image.fill(world_color)
+            #self.image.set_colorkey(world_color)
+
+            #pygame.draw.rect(pygame.Surface([width,height]),
+            #                trail,
+            #                pygame.Rect(0, 0, width, height))
+            
+            self.rect = self.image.get_rect()
+
+            self.rect.x = x_loc
+            self.rect.y = y_loc
+
+            pygame.draw.rect(self.image, color,
+                            pygame.Rect(0, 0, width, height))
+            
+
+             
+
+        #def grow(self):
+            
+    RED = (255,0,0)
+
+    all_sprites_list = pygame.sprite.Group()
+    #test_sprite = Sprite(RED, sprite_size[0], sprite_size[1], 0, 0)
+    #all_sprites_list.add(test_sprite)
+    exit = True
+    clock = pygame.time.Clock()
+    range_gap = 10
+    #for i in range(range_gap, world_dimensions[0]):
+    #    for j in range(range_gap, world_dimensions[1]):
+
+
+    for i in range(10, 400, 100):
+        for j in range(10, 400, 100):
+            y = Sprite(RED, sprite_size[0], sprite_size[1], i, j)
+            all_sprites_list.add(y)
+
+
+    print(len(all_sprites_list))
+
+    while exit:
+        #print('here')
+        
+        #print(color_count)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_x:
+                    exit = False
+    
+        all_sprites_list.update()
+
+        all_sprites_list.draw(sample_surface)
+        pygame.display.flip()
+        clock.tick(20)
+    
+    pygame.quit()
+
  
 def Main3():
     # GLOBAL VARIABLES
@@ -334,5 +411,6 @@ def Main3():
     pygame.quit()
 
 
+#Main3()
 
-Main3()
+testMain()
