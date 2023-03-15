@@ -15,7 +15,11 @@ def Main3():
     line_width = 2
     range_gap = cube_size + line_width
     world_color = (0,0,0)
-    display_size = 442 # display_size = x(line_width) + y(cube_size), x = y+1 (one more line than cube)
+    
+    num_cubes = 20
+    num_lines = num_cubes + 1 #is one more than # cubes
+    
+    display_size = num_cubes * cube_size + num_lines * line_width # display_size = x(line_width) + y(cube_size), x = y+1 (one more line than cube)
 
     sample_surface = pygame.display.set_mode((display_size,display_size))
     
@@ -116,28 +120,28 @@ def Main3():
         direction = random.choice(['left', 'right', 'up', 'down'])
         if direction == 'left' and move_sprite.rect.x > 2:
             move_sprite.moveLeft(22)
-        if direction == 'right' and move_sprite.rect.x < 420:
+        if direction == 'right' and move_sprite.rect.x < display_size - 22:
             move_sprite.moveRight(22)
-        if direction == 'down' and move_sprite.rect.y < 420:
+        if direction == 'down' and move_sprite.rect.y < display_size - 22:
             move_sprite.moveUp(22)
         if direction == 'up' and move_sprite.rect.y > 2:
             move_sprite.moveDown(22)
 
     def moveDirection(x, y, move_sprite):
         if x > 0:
-            if y > 0 and move_sprite.rect.x < 420 and move_sprite.rect.y < 420:
+            if y > 0 and move_sprite.rect.x < display_size - 22 and move_sprite.rect.y < display_size - 22:
                 move_sprite.moveUpRight(22)
-            if y == 0 and move_sprite.rect.x < 420:
+            if y == 0 and move_sprite.rect.x < display_size - 22:
                 move_sprite.moveRight(22)
-            if y < 0 and move_sprite.rect.x < 420 and move_sprite.rect.y > 2:
+            if y < 0 and move_sprite.rect.x < display_size - 22 and move_sprite.rect.y > 2:
                 move_sprite.moveDownRight(22)
         elif x == 0:
-            if y > 0 and move_sprite.rect.y < 420:
+            if y > 0 and move_sprite.rect.y < display_size - 22:
                 move_sprite.moveUp(22)
             if y < 0 and move_sprite.rect.y > 2:
                 move_sprite.moveDown(22)
         elif x < 0:
-            if y > 0 and move_sprite.rect.y < 420 and move_sprite.rect.x > 2:
+            if y > 0 and move_sprite.rect.y < display_size - 22 and move_sprite.rect.x > 2:
                 move_sprite.moveUpLeft(22)
             if y == 0 and move_sprite.rect.x > 2:
                 move_sprite.moveLeft(22)
@@ -145,7 +149,7 @@ def Main3():
                 move_sprite.moveDownLeft(22)
 
     def searchEmpty(moving_sprite):
-        for x in range(1,21):
+        for x in range(1,num_cubes+1):
             search_list = []
             
             for i in range(-x, x+1):
@@ -157,7 +161,7 @@ def Main3():
                 search_list.remove(direction)
                 search_val = (moving_sprite.rect.x + direction[0] * 22, moving_sprite.rect.y + direction[1] * 22)
                 #print(direction)
-                if (search_val[0] >= 2 and search_val[0] <= 440) and (search_val[1] >= 2 and search_val[1] <= 440):
+                if (search_val[0] >= 2 and search_val[0] <= display_size - 2) and (search_val[1] >= 2 and search_val[1] <= display_size - 2):
                     if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
                         moveDirection(direction[0], direction[1], moving_sprite)
                         return
@@ -200,7 +204,7 @@ def Main3():
                 if (search_val[0] > 0 and search_val[0] < 442) and (search_val[1] > 0 and search_val[1] < 442):
                     if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
                         if x_val <= -1 and playerCar.rect.x > 2:
-                            if y_val >= 1 and playerCar.rect.y < 420:
+                            if y_val >= 1 and playerCar.rect.y < display_size - 22:
                                 moving_sprite.moveUpLeft(22)
                                 break
                             if y_val == 0:
@@ -209,8 +213,8 @@ def Main3():
                             if y_val <= -1 and playerCar.rect.y > 2:
                                 moving_sprite.moveDownLeft(22)
                                 break
-                        if x_val >= 1 and playerCar.rect.x < 420:
-                            if y_val >= 1 and playerCar.rect.y < 420:
+                        if x_val >= 1 and playerCar.rect.x < display_size - 22:
+                            if y_val >= 1 and playerCar.rect.y < display_size - 22:
                                 moving_sprite.moveUpRight(22)
                                 break
                             if y_val == 0:
@@ -220,7 +224,7 @@ def Main3():
                                 moving_sprite.moveDownRight(22)
                                 break
                         if x_val == 0:
-                            if y_val >= 1 and playerCar.rect.y < 420:
+                            if y_val >= 1 and playerCar.rect.y < display_size - 22:
                                 moving_sprite.moveUp(22)
                                 break
                             if y_val == 0:
@@ -297,9 +301,9 @@ def Main3():
         # keys = pygame.key.get_pressed()
         # if keys[pygame.K_LEFT] and playerCar.rect.x > 2:
         #     playerCar.moveLeft(22)
-        # if keys[pygame.K_RIGHT] and playerCar.rect.x < 420:
+        # if keys[pygame.K_RIGHT] and playerCar.rect.x < display_size - 22:
         #     playerCar.moveRight(22)
-        # if keys[pygame.K_DOWN] and playerCar.rect.y < 420:
+        # if keys[pygame.K_DOWN] and playerCar.rect.y < display_size - 22:
         #     playerCar.moveUp(22)
         # if keys[pygame.K_UP]  and playerCar.rect.y > 2:
         #     playerCar.moveDown(22)
@@ -308,9 +312,9 @@ def Main3():
         #     keys2 = pygame.key.get_pressed()
         #     if keys2[pygame.K_a] and playerCar2.rect.x > 2:
         #         playerCar2.moveLeft(22)
-        #     if keys2[pygame.K_d] and playerCar2.rect.x < 420:
+        #     if keys2[pygame.K_d] and playerCar2.rect.x < display_size - 22:
         #         playerCar2.moveRight(22)
-        #     if keys2[pygame.K_s] and playerCar2.rect.y < 420:
+        #     if keys2[pygame.K_s] and playerCar2.rect.y < display_size - 22:
         #         playerCar2.moveUp(22)
         #     if keys2[pygame.K_w]  and playerCar2.rect.y > 2:
         #         playerCar2.moveDown(22)
@@ -325,7 +329,7 @@ def Main3():
         #                        pygame.Rect(i + line_width, j + line_width, cube_size, cube_size))
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(20)
     
     pygame.quit()
 
