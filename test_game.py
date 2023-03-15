@@ -70,15 +70,39 @@ def Main3():
                             pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
             self.rect.x -= pixels
 
-        def moveForward(self, pixels):
+        def moveUp(self, pixels):
             pygame.draw.rect(sample_surface, self.trail,
                             pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
             self.rect.y += pixels
 
-        def moveBack(self, pixels):
+        def moveDown(self, pixels):
             pygame.draw.rect(sample_surface, self.trail,
                             pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
             self.rect.y -= pixels
+
+        def moveUpLeft(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x -= pixels
+            self.rect.y += pixels
+
+        def moveUpRight(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x += pixels
+            self.rect.y += pixels
+
+        def moveDownLeft(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y -= pixels
+            self.rect.x -= pixels
+
+        def moveDownRight(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y -= pixels
+            self.rect.x += pixels
           
     
     def clone(cloned_sprite):
@@ -88,6 +112,73 @@ def Main3():
         new_sprite.rect.y = cloned_sprite.getY()
         return new_sprite
     
+    def moveRandom(move_sprite):
+        direction = random.choice(['left', 'right', 'up', 'down'])
+        if direction == 'left' and move_sprite.rect.x > 2:
+            move_sprite.moveLeft(22)
+        if direction == 'right' and move_sprite.rect.x < 420:
+            move_sprite.moveRight(22)
+        if direction == 'down' and move_sprite.rect.y < 420:
+            move_sprite.moveUp(22)
+        if direction == 'up' and move_sprite.rect.y > 2:
+            move_sprite.moveDown(22)
+
+    def moveTowardsEmpty(moving_sprite):
+        curr_x = moving_sprite.rect.x
+        curr_y = moving_sprite.rect.y
+        for total_search in range(1,11):
+            search_list = [] #use a search list instead of random choice
+            for single_search in range(1,8):
+                x_val = random.choice([0,-1, 1])
+                y_val = random.choice([0,-1, 1])
+                search_val = (total_search * x_val * 22 + curr_x, total_search * y_val * 22 + curr_y)
+                if (search_val[0] > 0 and search_val[0] < 442) and (search_val[1] > 0 and search_val[1] < 442):
+                    if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
+                        if x_val <= -1 and playerCar.rect.x > 2:
+                            if y_val >= 1 and playerCar.rect.y < 420:
+                                moving_sprite.moveUpLeft(22)
+                                break
+                            if y_val == 0:
+                                moving_sprite.moveLeft(22)
+                                break
+                            if y_val <= -1 and playerCar.rect.y > 2:
+                                moving_sprite.moveDownLeft(22)
+                                break
+                        if x_val >= 1 and playerCar.rect.x < 420:
+                            if y_val >= 1 and playerCar.rect.y < 420:
+                                moving_sprite.moveUpRight(22)
+                                break
+                            if y_val == 0:
+                                moving_sprite.moveRight(22)
+                                break
+                            if y_val <= -1 and playerCar.rect.y > 2:
+                                moving_sprite.moveDownRight(22)
+                                break
+                        if x_val == 0:
+                            if y_val >= 1 and playerCar.rect.y < 420:
+                                moving_sprite.moveUp(22)
+                                break
+                            if y_val == 0:
+                                #moveRandom(moving_sprite)
+                                break
+                            if y_val <= -1 and playerCar.rect.y > 2:
+                                moving_sprite.moveDown(22)
+                                break
+                        break
+                    break
+                break
+            break
+
+
+
+    def checkMap():
+        color_count = 0
+        for x in range(5, 442, 22):
+            for y in range(5, 442, 22):
+                if sample_surface.get_at((x,y))[0:3] == (0,0,0):
+                    color_count += 1
+        return color_count
+
     pygame.init()
  
     
@@ -108,20 +199,16 @@ def Main3():
     
     all_sprites_list.add(playerCar)
 
-    playerCar2 = clone(playerCar)
+    #playerCar2 = clone(playerCar)
 
-    print(playerCar2 in all_sprites_list)
+    #print(playerCar2 in all_sprites_list)
 
     exit = True
     clock = pygame.time.Clock()
 
     while exit:
         #print('here')
-        color_count = 0
-        for x in range(5, 442, 22):
-            for y in range(5, 442, 22):
-                if sample_surface.get_at((x,y))[0:3] == (0,0,0):
-                    color_count += 1
+        
         #print(color_count)
         
         for event in pygame.event.get():
@@ -130,27 +217,36 @@ def Main3():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_x:
                     exit = False
-    
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and playerCar.rect.x > 2:
-            playerCar.moveLeft(22)
-        if keys[pygame.K_RIGHT] and playerCar.rect.x < 420:
-            playerCar.moveRight(22)
-        if keys[pygame.K_DOWN] and playerCar.rect.y < 420:
-            playerCar.moveForward(22)
-        if keys[pygame.K_UP]  and playerCar.rect.y > 2:
-            playerCar.moveBack(22)
+
+        #
+        # moveRandom(playerCar)
+        #moveTowardsEmpty(moving_sprite)
+        #print(playerCar.rect.x)
+        #print(playerCar.rect.y)
+        if (random.random()) > 0.95:
+            moveRandom(playerCar)
+        else:
+            moveTowardsEmpty(playerCar)
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_LEFT] and playerCar.rect.x > 2:
+        #     playerCar.moveLeft(22)
+        # if keys[pygame.K_RIGHT] and playerCar.rect.x < 420:
+        #     playerCar.moveRight(22)
+        # if keys[pygame.K_DOWN] and playerCar.rect.y < 420:
+        #     playerCar.moveUp(22)
+        # if keys[pygame.K_UP]  and playerCar.rect.y > 2:
+        #     playerCar.moveDown(22)
         
-        if playerCar2 in all_sprites_list:
-            keys2 = pygame.key.get_pressed()
-            if keys2[pygame.K_a] and playerCar2.rect.x > 2:
-                playerCar2.moveLeft(22)
-            if keys2[pygame.K_d] and playerCar2.rect.x < 420:
-                playerCar2.moveRight(22)
-            if keys2[pygame.K_s] and playerCar2.rect.y < 420:
-                playerCar2.moveForward(22)
-            if keys2[pygame.K_w]  and playerCar2.rect.y > 2:
-                playerCar2.moveBack(22)
+        # if playerCar2 in all_sprites_list:
+        #     keys2 = pygame.key.get_pressed()
+        #     if keys2[pygame.K_a] and playerCar2.rect.x > 2:
+        #         playerCar2.moveLeft(22)
+        #     if keys2[pygame.K_d] and playerCar2.rect.x < 420:
+        #         playerCar2.moveRight(22)
+        #     if keys2[pygame.K_s] and playerCar2.rect.y < 420:
+        #         playerCar2.moveUp(22)
+        #     if keys2[pygame.K_w]  and playerCar2.rect.y > 2:
+        #         playerCar2.moveDown(22)
     
         all_sprites_list.update()
         #sample_surface.fill((200, 200, 200))
@@ -162,7 +258,7 @@ def Main3():
         #                        pygame.Rect(i + line_width, j + line_width, cube_size, cube_size))
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(50)
     
     pygame.quit()
 
