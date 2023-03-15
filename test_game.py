@@ -123,6 +123,70 @@ def Main3():
         if direction == 'up' and move_sprite.rect.y > 2:
             move_sprite.moveDown(22)
 
+    def moveDirection(x, y, move_sprite):
+        if x > 0:
+            if y > 0 and move_sprite.rect.x < 420 and move_sprite.rect.y < 420:
+                move_sprite.moveUpRight(22)
+            if y == 0 and move_sprite.rect.x < 420:
+                move_sprite.moveRight(22)
+            if y < 0 and move_sprite.rect.x < 420 and move_sprite.rect.y > 2:
+                move_sprite.moveDownRight(22)
+        elif x == 0:
+            if y > 0 and move_sprite.rect.y < 420:
+                move_sprite.moveUp(22)
+            if y < 0 and move_sprite.rect.y > 2:
+                move_sprite.moveDown(22)
+        elif x < 0:
+            if y > 0 and move_sprite.rect.y < 420 and move_sprite.rect.x > 2:
+                move_sprite.moveUpLeft(22)
+            if y == 0 and move_sprite.rect.x > 2:
+                move_sprite.moveLeft(22)
+            if y < 0 and move_sprite.rect.x > 2 and move_sprite.rect.y > 2:
+                move_sprite.moveDownLeft(22)
+
+    def searchEmpty(moving_sprite):
+        for x in range(1,21):
+            search_list = []
+            
+            for i in range(-x, x+1):
+                for j in range(-x, x+1):
+                    search_list.append([i,j])
+            print(search_list)
+            while len(search_list) > 0:
+                direction = random.choice(search_list)
+                search_list.remove(direction)
+                search_val = (moving_sprite.rect.x + direction[0] * 22, moving_sprite.rect.y + direction[1] * 22)
+                #print(direction)
+                if (search_val[0] >= 2 and search_val[0] <= 440) and (search_val[1] >= 2 and search_val[1] <= 440):
+                    if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
+                        moveDirection(direction[0], direction[1], moving_sprite)
+                        return
+                
+            
+            print(search_list)
+
+    def closeSearch(moving_sprite):
+        curr_x = moving_sprite.rect.x
+        curr_y = moving_sprite.rect.y
+
+        close_list = [(-1,1), (0,1), (1,1), (1,0), (1,-1), (0,-1), (-1,-1), (-1,0)]
+        second_list = [(-2,2), (-2,1), (-2,0), (-2,-1), (-2,-2), 
+                       (-1,2), (-1,1), (-1,0), (-1,-1), (-1,-2), 
+                       (0,2), (0,1), (0,-1), (0,-2), 
+                       (1,2), (1,1), (1,0), (1,-1), (1,-2), 
+                       (2,2), (2,1), (2,0), (2,-1), (2,-2)]
+        for non_used in range(len(close_list)):
+            close_dict = {1:(-1,1), 2:(0,1), 3:(1,1), 4:(1,0), 5:(1,-1), 6:(0,-1), 7:(-1,-1), 8:(-1,0)}
+
+            direction = random.choice(list(close_dict.items()))
+            del close_dict[direction[0]]
+            search_val = (curr_x + 22 * direction[1][0], curr_y + 22 * direction[1][1])
+            #if search_val[0] > 2 and search_val[1] < 442:
+            #    if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
+            #        
+            #else:
+            #    None        
+
     def moveTowardsEmpty(moving_sprite):
         curr_x = moving_sprite.rect.x
         curr_y = moving_sprite.rect.y
@@ -132,6 +196,7 @@ def Main3():
                 x_val = random.choice([0,-1, 1])
                 y_val = random.choice([0,-1, 1])
                 search_val = (total_search * x_val * 22 + curr_x, total_search * y_val * 22 + curr_y)
+                print(search_val)
                 if (search_val[0] > 0 and search_val[0] < 442) and (search_val[1] > 0 and search_val[1] < 442):
                     if sample_surface.get_at(search_val)[0:3] not in moving_sprite.getColors():
                         if x_val <= -1 and playerCar.rect.x > 2:
@@ -166,7 +231,7 @@ def Main3():
                                 break
                         break
                     break
-                break
+                
             break
 
 
@@ -223,10 +288,12 @@ def Main3():
         #moveTowardsEmpty(moving_sprite)
         #print(playerCar.rect.x)
         #print(playerCar.rect.y)
-        if (random.random()) > 0.95:
-            moveRandom(playerCar)
-        else:
-            moveTowardsEmpty(playerCar)
+        
+        #if (random.random()) > 0.95:
+            #moveRandom(playerCar)
+        #else:
+        searchEmpty(playerCar)
+        
         # keys = pygame.key.get_pressed()
         # if keys[pygame.K_LEFT] and playerCar.rect.x > 2:
         #     playerCar.moveLeft(22)
@@ -258,7 +325,7 @@ def Main3():
         #                        pygame.Rect(i + line_width, j + line_width, cube_size, cube_size))
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(50)
+        clock.tick(10)
     
     pygame.quit()
 
