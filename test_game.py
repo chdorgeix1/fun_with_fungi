@@ -8,6 +8,7 @@ def testMain():
 
 
     # World set up and iniation
+    clock = pygame.time.Clock()
 
     world_color = (200,200,200)
     world_dimensions = [506, 506]
@@ -94,6 +95,7 @@ def testMain():
                         group.add(example_sprite)
                         all_sprites_list.add(example_sprite)
 
+
     # The sprite class is both the world the player's hyphae move on and can become of the player's sprite list
     # Sprites in a sprite list "grow" or spread their sprite list to other nearby sprites 
 
@@ -126,20 +128,21 @@ def testMain():
                 for i in [-12, 0, 12]:
                     for j in [-12, 0, 12]:
                         if (self.rect.x + i > 0 and self.rect.x + i < 506) and (self.rect.y + j > 0 and self.rect.y + j < 506):
-                            growth_list.append([self.rect.x + i, self.rect.y + j])
+                            growth_list.append((self.rect.x + i, self.rect.y + j))
                 growth_counter = 0
-                for example_sprite in all_sprites_list:
-                    if example_sprite.rect[0:2] in growth_list and example_sprite.color == self.color:
+                for loc in growth_list:
+                    example_sprite = sprite_dict[loc]
+                    if example_sprite.color == self.color:
                         growth_counter += 1
                     else:
-                        if random.random() > 0.99 - growthmod and example_sprite.rect[0:2] in growth_list:
+                        if random.random() > 0.95 - growthmod:
                             example_sprite.kill()
                             group.add(example_sprite)
                             all_sprites_list.add(example_sprite)
                 if growth_counter >= 5:
                     self.growth_state = False
             else:
-                if random.random() > 0.999 - fillrate:
+                if random.random() > 0.98 - fillrate:
                     self.growth_state = True
     
     # Behavior of sprites in the blue_sprite_list, this list will eventually be swapped/renamed to a type of fungi/slime mold
@@ -149,13 +152,13 @@ def testMain():
             blue_sprite.remove(red_sprites_list)
         if blue_sprite != playerHyphae and blue_sprite != playerHyphae1:
             blue_sprite.changeColor(BLUE)
-            blue_sprite.naturalGrowth(blue_sprites_list)
+            blue_sprite.naturalGrowth(blue_sprites_list, growthmod = 0.1)
     def redSpriteBehavior(red_sprite):
         if len(red_sprite.groups()) > 2:
             red_sprite.remove(blue_sprites_list)
         if red_sprite != playerHyphae and red_sprite != playerHyphae1:
             red_sprite.changeColor(RED)
-            red_sprite.naturalGrowth(red_sprites_list)
+            red_sprite.naturalGrowth(red_sprites_list, fillrate = 0.2)
 
 
     BLACK = (0,0,0)
@@ -166,13 +169,6 @@ def testMain():
     all_sprites_list = pygame.sprite.Group()
     red_sprites_list = pygame.sprite.Group()
     blue_sprites_list = pygame.sprite.Group()
-    
-    #test_sprite = Sprite(RED, sprite_size[0], sprite_size[1], 0, 0)
-    #all_sprites_list.add(test_sprite)
-    
-    clock = pygame.time.Clock()
-    #for i in range(range_gap, world_dimensions[0]):
-    #    for j in range(range_gap, world_dimensions[1]):
 
 
     for i in range(2, 500, 12):
@@ -188,45 +184,25 @@ def testMain():
     playerHyphae1.rect.x = 26
     playerHyphae1.rect.y = 26
     
-    all_sprites_list.add(playerHyphae)
-    red_sprites_list.add(playerHyphae)
+    #all_sprites_list.add(playerHyphae)
+    #red_sprites_list.add(playerHyphae)
 
-    all_sprites_list.add(playerHyphae1)
-    blue_sprites_list.add(playerHyphae1)
+    #all_sprites_list.add(playerHyphae1)
+    #blue_sprites_list.add(playerHyphae1)
 
-    #print(all_sprites_list.sprites()[0])
     sprite_dict = {}
-    dict_count = 0
     for ex_sprite in all_sprites_list:
-        #print(ex_sprite.rect[0:2])
-        #dic2 = dict(dic0, **dic1)
         sprite_dict.update({(ex_sprite.rect[0], ex_sprite.rect[1]): ex_sprite})
-    #print(sprite_dict[(470,470)])
-    print('###################:')
-    print('')
-    print(sprite_dict)
-    #print(sprite_dict[(2,2)])
-    print('')
-    print('')
-    #print(len(all_sprites_list))
+
     count = 0
     exit = True
     while exit:
         count += 1
-
+        #print(count)
         if count == 1:
             red_sprites_list.add(sprite_dict[(494,494)])
-            blue_sprites_list.add(sprite_dict[(2,2)])
-            
-            #for example_sprite in all_sprites_list:
-            #    if example_sprite.rect.x == 470 and example_sprite.rect.y == 470:
-            #        red_sprites_list.add(example_sprite)
-            #    if example_sprite.rect.x == 26 and example_sprite.rect.y == 26:
-            #        blue_sprites_list.add(example_sprite)
+            blue_sprites_list.add(sprite_dict[(2,2)])              
 
-                
-
-        
         cell_list = list(range(0,len(all_sprites_list)))
 
         for i in range(len(all_sprites_list)):
@@ -299,9 +275,9 @@ def testMain():
 
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(50)
-        #clock.tick(2)
-    
+        clock.tick(20)
+            #clock.tick(2)
+        
     pygame.quit()
 
  
