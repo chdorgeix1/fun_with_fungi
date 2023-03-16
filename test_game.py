@@ -6,17 +6,100 @@ import random
 #pygame.init()
 def testMain():
 
-    world_color = (0,0,0)
-    world_dimensions = [500, 500]
-    sprite_size = [50, 50]
+    world_color = (200,200,200)
+    world_dimensions = [506, 506]
+    sprite_size = [10, 10]
     sample_surface = pygame.display.set_mode((world_dimensions[0],world_dimensions[1]))
     
     sample_surface.fill(world_color)
 
-    class Sprite(pygame.sprite.Sprite):
-        def __init__(self, color, height, width, x_loc, y_loc):
+    class Hyphae(pygame.sprite.Sprite):
+        def __init__(self, color, trail, height, width):
             super().__init__()
+
+            self.color = color
+            self.trail = trail
+            self.width = width
+            self.height = height
+            self.image = pygame.Surface([width, height])
+            #self.image.fill(world_color)
+            #self.image.set_colorkey(world_color)
+
+            #pygame.draw.rect(pygame.Surface([width,height]),
+            #                trail,
+            #                pygame.Rect(0, 0, width, height))
             
+            pygame.draw.rect(self.image,
+                            color,
+                            pygame.Rect(0, 0, width, height))
+
+            self.rect = self.image.get_rect()    
+
+        def getColors(self):
+            return [self.color, self.trail]
+
+        def getX(self):
+            return self.rect.x
+        
+        def getY(self):
+            return self.rect.y
+        
+        def moveRight(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x += pixels
+
+        def moveLeft(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x -= pixels
+
+        def moveUp(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y += pixels
+
+        def moveDown(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y -= pixels
+
+        def moveUpLeft(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x -= pixels
+            self.rect.y += pixels
+
+        def moveUpRight(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.x += pixels
+            self.rect.y += pixels
+
+        def moveDownLeft(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y -= pixels
+            self.rect.x -= pixels
+
+        def moveDownRight(self, pixels):
+            pygame.draw.rect(sample_surface, self.trail,
+                            pygame.Rect(self.rect.x, self.rect.y, self.width, self.height))
+            self.rect.y -= pixels
+            self.rect.x += pixels
+        
+        def paintSprites(self,group):
+            for example_sprite in all_sprites_list:
+                if example_sprite != playerHyphae or example_sprite != playerHyphae1:
+                    if example_sprite.rect[0:2] == self.rect[0:2]:
+                        example_sprite.kill()
+                        group.add(example_sprite)
+                        all_sprites_list.add(example_sprite)
+
+    class Sprite(pygame.sprite.Sprite):
+        def __init__(self, color, height, width, x_loc, y_loc, growing = True):
+            super().__init__()
+            self.growth_state = growing
             self.color = color
             self.width = width
             self.height = height
@@ -36,14 +119,56 @@ def testMain():
             pygame.draw.rect(self.image, color,
                             pygame.Rect(0, 0, width, height))
             
+        def changeColor(self, new_color):
+            self.color = new_color
+            pygame.draw.rect(self.image, self.color,
+                                pygame.Rect(0, 0, self.width, self.height))
+        
 
-             
+        def naturalGrowth(self, group, growthmod = 0, fillrate = 0):
+            if self.growth_state == True:
+                growth_list = []
+                for i in [-12, 0, 12]:
+                    for j in [-12, 0, 12]:
+                        if (self.rect.x + i > 0 and self.rect.x + i < 506) and (self.rect.y + j > 0 and self.rect.y + j < 506):
+                            growth_list.append([self.rect.x + i, self.rect.y + j])
+                growth_counter = 0
+                for example_sprite in all_sprites_list:
+                    if example_sprite.rect[0:2] in growth_list and example_sprite.color == self.color:
+                        growth_counter += 1
+                    else:
+                        if random.random() > 0.99 - growthmod and example_sprite.rect[0:2] in growth_list:
+                            example_sprite.kill()
+                            group.add(example_sprite)
+                            all_sprites_list.add(example_sprite)
+                if growth_counter >= 5:
+                    self.growth_state = False
+            else:
+                if random.random() > 0.999 - fillrate:
+                    self.growth_state = True
+        
+    def blueSpriteBehavior(blue_sprite):
+        if len(blue_sprite.groups()) > 2:
+            blue_sprite.remove(red_sprites_list)
+        if blue_sprite != playerHyphae and blue_sprite != playerHyphae1:
+            blue_sprite.changeColor(BLUE)
+            blue_sprite.naturalGrowth(blue_sprites_list)
+    def redSpriteBehavior(red_sprite):
+        if len(red_sprite.groups()) > 2:
+            red_sprite.remove(blue_sprites_list)
+        if red_sprite != playerHyphae and red_sprite != playerHyphae1:
+            red_sprite.changeColor(RED)
+            red_sprite.naturalGrowth(red_sprites_list)
 
-        #def grow(self):
-            
+
+    BLACK = (0,0,0)
     RED = (255,0,0)
-
+    BLUE = (0, 0, 255)
+    ORANGE = (255, 100, 0)
     all_sprites_list = pygame.sprite.Group()
+    red_sprites_list = pygame.sprite.Group()
+    blue_sprites_list = pygame.sprite.Group()
+    
     #test_sprite = Sprite(RED, sprite_size[0], sprite_size[1], 0, 0)
     #all_sprites_list.add(test_sprite)
     exit = True
@@ -53,31 +178,114 @@ def testMain():
     #    for j in range(range_gap, world_dimensions[1]):
 
 
-    for i in range(10, 400, 100):
-        for j in range(10, 400, 100):
-            y = Sprite(RED, sprite_size[0], sprite_size[1], i, j)
+    for i in range(2, 500, 12):
+        for j in range(2, 500, 12):
+            y = Sprite(BLACK, sprite_size[0], sprite_size[1], i, j)
             all_sprites_list.add(y)
 
+    playerHyphae = Hyphae(ORANGE, RED, 10, 10)
+    playerHyphae.rect.x = 482
+    playerHyphae.rect.y = 482
+
+    playerHyphae1 = Hyphae(ORANGE, RED, 10, 10)
+    playerHyphae1.rect.x = 482
+    playerHyphae1.rect.y = 482
+    
+    all_sprites_list.add(playerHyphae)
+    red_sprites_list.add(playerHyphae)
+
+    all_sprites_list.add(playerHyphae1)
+    red_sprites_list.add(playerHyphae1)
 
     print(len(all_sprites_list))
-
+    count = 0
     while exit:
-        #print('here')
-        
-        #print(color_count)
-        
+        count += 1
+
+        if count == 1:
+            for example_sprite in all_sprites_list:
+                if example_sprite.rect.x == 482 and example_sprite.rect.y == 482:
+                    red_sprites_list.add(example_sprite)
+                if example_sprite.rect.x == 26 and example_sprite.rect.y == 26:
+                    blue_sprites_list.add(example_sprite)
+
+                
+
+        if count > 10:
+            cell_list = list(range(0,len(all_sprites_list)))
+
+            for i in range(len(all_sprites_list)):
+                x = random.choice(cell_list)
+                cell_list.remove(x)
+                example_sprite = all_sprites_list.sprites()[x]
+                if example_sprite in red_sprites_list:
+                    redSpriteBehavior(example_sprite)
+                if example_sprite in blue_sprites_list:
+                    blueSpriteBehavior(example_sprite)
+                
+        count_list = list(range(0,1000,50))
+        if count in count_list:
+            print('')
+            print('Number of blue sprites:')
+            print(len(blue_sprites_list.sprites()))
+            print('Number of red sprites:')
+            print(len(red_sprites_list.sprites()))
+            print('')
+            print('')
+            print('')
+
+
+            #for blue_sprite in blue_sprites_list:
+            #    blue_sprite.changeColor(BLUE)
+            #    blue_sprite.naturalGrowth(blue_sprites_list)
+            #for red_sprite in red_sprites_list:
+            #    red_sprite.changeColor(RED)
+            #    red_sprite.naturalGrowth(red_sprites_list)
+            
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_x:
                     exit = False
-    
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and playerHyphae.rect.x > 2:
+            playerHyphae.moveLeft(12)
+            playerHyphae.paintSprites(red_sprites_list)
+        if keys[pygame.K_RIGHT] and playerHyphae.rect.x < world_dimensions[0] - 22:
+            playerHyphae.moveRight(12)
+            playerHyphae.paintSprites(red_sprites_list)
+        if keys[pygame.K_DOWN] and playerHyphae.rect.y < world_dimensions[1] - 22:
+            playerHyphae.moveUp(12)
+            playerHyphae.paintSprites(red_sprites_list)
+        if keys[pygame.K_UP]  and playerHyphae.rect.y > 2:
+            playerHyphae.moveDown(12)
+            playerHyphae.paintSprites(red_sprites_list)
+        
+        if playerHyphae1 in all_sprites_list:
+            keys2 = pygame.key.get_pressed()
+            if keys2[pygame.K_a] and playerHyphae1.rect.x > 2:
+                playerHyphae1.moveLeft(12)
+                playerHyphae1.paintSprites(red_sprites_list)
+            if keys2[pygame.K_d] and playerHyphae1.rect.x < world_dimensions[0] - 22:
+                playerHyphae1.moveRight(12)
+                playerHyphae1.paintSprites(red_sprites_list)
+            if keys2[pygame.K_s] and playerHyphae1.rect.y < world_dimensions[1] - 22:
+                playerHyphae1.moveUp(12)
+                playerHyphae1.paintSprites(red_sprites_list)
+            if keys2[pygame.K_w]  and playerHyphae1.rect.y > 2:
+                playerHyphae1.moveDown(12)
+                playerHyphae1.paintSprites(red_sprites_list)
+
         all_sprites_list.update()
 
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(20)
+        clock.tick(10)
+        #clock.tick(2)
     
     pygame.quit()
 
@@ -406,7 +614,7 @@ def Main3():
         #                        pygame.Rect(i + line_width, j + line_width, cube_size, cube_size))
         all_sprites_list.draw(sample_surface)
         pygame.display.flip()
-        clock.tick(20)
+        clock.tick(10)
     
     pygame.quit()
 
