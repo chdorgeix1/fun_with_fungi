@@ -1,8 +1,72 @@
 # import pygame package
 import pygame
+import pygame_menu
 import random
 
 def testMain():
+    def set_player_class(value):
+        if value == 1:
+            return 'hamsters'
+    def designWorld(player_class = 0, ai_class = 0, difficulty = 0, world_map = 0):
+        
+        # Code fplayers to choose their class
+        player_class_choice = set_player_class(player_class)
+        # Code for players to choose ai_class
+        #ai_class_choice = 
+        # Code for players to set difficulty
+        difficulty = 4
+        # Code for world map_choice
+        map_choice = 0
+
+        return (player_class_choice, ai_class_choice, difficulty, map_choice)
+
+    def createWorld(sample_surface, world_dimensions, world_color, food_rate = 0.01):
+        sample_surface.fill(world_color)
+
+        #World Generation
+        food_count = 0
+        for i in range(2, world_dimensions[0]-6, 12):
+            for j in range(2, world_dimensions[1]-6, 12):
+                if random.random() > 1 - food_rate:
+                    y = Sprite(TRUEGREEN, sprite_size[0], sprite_size[1], i, j)
+                    food_sprite_list.add(y)
+                    food_count += 1
+                else:
+                    y = Sprite(BLACK, sprite_size[0], sprite_size[1], i, j)
+                all_sprites_list.add(y)
+        print(food_count)
+        playerHyphae = Hyphae(ORANGE, RED, 10, 10)
+        playerHyphae.rect.x = 470
+        playerHyphae.rect.y = 470
+
+        playerHyphae1 = Hyphae(GREEN, BLUE, 10, 10)
+        playerHyphae1.rect.x = 26
+        playerHyphae1.rect.y = 26
+        
+        all_sprites_list.add(playerHyphae)
+        all_sprites_list.add(playerHyphae1)
+
+        playerHyphae = Hyphae(ORANGE, RED, 10, 10)
+        playerHyphae.rect.x = 470
+        playerHyphae.rect.y = 470
+
+        playerHyphae1 = Hyphae(GREEN, BLUE, 10, 10)
+        playerHyphae1.rect.x = 26
+        playerHyphae1.rect.y = 26
+        
+        all_sprites_list.add(playerHyphae)
+        all_sprites_list.add(playerHyphae1)
+
+        sprite_dict = {}
+        for ex_sprite in all_sprites_list:
+            sprite_dict.update({(ex_sprite.rect[0], ex_sprite.rect[1]): ex_sprite})
+        
+        red_sprites_list.add(sprite_dict[(world_dimensions[0]-12,world_dimensions[1]-12)])
+        blue_sprites_list.add(sprite_dict[(2,2)]) 
+
+        red_sprites_list.add(playerHyphae)
+        return clock, sample_surface, all_sprites_list, food_sprite_list, red_sprites_list, blue_sprites_list, sprite_dict, playerHyphae, playerHyphae1
+
 
     def generateWorld(world_color, world_dimensions, sprite_size, food_rate = 0.01):
         # World set up and iniation
@@ -209,6 +273,7 @@ def testMain():
             red_sprite.naturalGrowth(red_sprites_list, growth_count, growthmod, fillrate)
 
 
+
     #Colors
     BLACK = (0,0,0)
     RED = (255,0,0)
@@ -226,96 +291,126 @@ def testMain():
     blue_sprite_values = [3, 0.01, 0.1]
     red_sprites_values = [3, 0.01, 0.1]
     
+
     
     (clock, sample_surface, all_sprites_list, food_sprite_list, red_sprites_list, blue_sprites_list, 
-     sprite_dict, playerHyphae, playerHyphae1) = generateWorld(world_color, world_dimensions, sprite_size, food_rate)
-    count = 0
-    exit = False
-    while not exit:
-        paused = False
-        for event in pygame.event.get():
-            #print('here')
-            if event.type == pygame.QUIT:
-                exit = True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_x:
+    sprite_dict, playerHyphae, playerHyphae1) = generateWorld(world_color, world_dimensions, sprite_size, food_rate)
+    playerHyphae.paintSprites(red_sprites_list)
+    playerHyphae1.paintSprites(blue_sprites_list)
+
+
+    #widget = menu.get_widget('test_widget')
+    #selected = menu.get_selected_widget()
+
+    def beginGame():
+        count = 0
+        exit = False
+        while not exit:
+            paused = False
+            for event in pygame.event.get():
+                #print('here')
+                if event.type == pygame.QUIT:
                     exit = True
-                if event.key == pygame.K_p: # Pausing
-                    #print('here1')
-                    paused = True
-                    while paused:
-                        pygame.time.delay(10)
-                        for event in pygame.event.get():
-                            if event.type == pygame.KEYDOWN:
-                                if event.key == pygame.K_u:  # Unpausing
-                                    paused = False
-                #if event.key == pygame.K_y:
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_x:
+                        exit = True
+                    if event.key == pygame.K_p: # Pausing
+                        #print('here1')
+                        paused = True
+                        while paused:
+                            pygame.time.delay(10)
+                            for event in pygame.event.get():
+                                if event.type == pygame.KEYDOWN:
+                                    if event.key == pygame.K_u:  # Unpausing
+                                        paused = False
+                    #if event.key == pygame.K_y:
 
 
-        if not paused:
-            if trait_point_dict[RED] == 1:
-                print('Increased GROWTH')
-                red_sprites_values[1] = 0.5
-            count += 1
-            print(trait_point_dict)
-            cell_list = list(range(0,len(all_sprites_list)))
-            for i in range(len(all_sprites_list)):
-                x = random.choice(cell_list)
-                cell_list.remove(x)
-                example_sprite = all_sprites_list.sprites()[x]
-                if example_sprite in red_sprites_list:
-                    redSpriteBehavior(example_sprite, red_sprites_values)
-                if example_sprite in blue_sprites_list:
-                    blueSpriteBehavior(example_sprite, blue_sprite_values)
-                    
-            count_list = list(range(0,1000,50))
-            if count in count_list:
-                print('')
-                print('Number of blue sprites:')
-                print(len(blue_sprites_list.sprites()))
-                print('Number of red sprites:')
-                print(len(red_sprites_list.sprites()))
-                print('')
-                print('')
-                print('')
+            if not paused:
+                if trait_point_dict[RED] == 1:
+                    print('Increased GROWTH')
+                    red_sprites_values[1] += 0.1
+                count += 1
+                print(trait_point_dict)
+                cell_list = list(range(0,len(all_sprites_list)))
+                for i in range(len(all_sprites_list)):
+                    x = random.choice(cell_list)
+                    cell_list.remove(x)
+                    example_sprite = all_sprites_list.sprites()[x]
+                    if example_sprite in red_sprites_list:
+                        redSpriteBehavior(example_sprite, red_sprites_values)
+                    if example_sprite in blue_sprites_list:
+                        blueSpriteBehavior(example_sprite, blue_sprite_values)
+                        
+                count_list = list(range(0,1000,50))
+                if count in count_list:
+                    print('')
+                    print('Number of blue sprites:')
+                    print(len(blue_sprites_list.sprites()))
+                    print('Number of red sprites:')
+                    print(len(red_sprites_list.sprites()))
+                    print('')
+                    print('')
+                    print('')
 
-            
-            keys = pygame.key.get_pressed()                    
-            if keys[pygame.K_LEFT] and playerHyphae.rect.x > 2:
-                playerHyphae.moveLeft(12)
-                playerHyphae.paintSprites(red_sprites_list)
-            if keys[pygame.K_RIGHT] and playerHyphae.rect.x < world_dimensions[0] - 22:
-                playerHyphae.moveRight(12)
-                playerHyphae.paintSprites(red_sprites_list)
-            if keys[pygame.K_DOWN] and playerHyphae.rect.y < world_dimensions[1] - 22:
-                playerHyphae.moveUp(12)
-                playerHyphae.paintSprites(red_sprites_list)
-            if keys[pygame.K_UP]  and playerHyphae.rect.y > 2:
-                playerHyphae.moveDown(12)
-                playerHyphae.paintSprites(red_sprites_list)
-            
-            if playerHyphae1 in all_sprites_list:
-                keys2 = pygame.key.get_pressed()
-                if keys2[pygame.K_a] and playerHyphae1.rect.x > 2:
-                    playerHyphae1.moveLeft(12)
-                    playerHyphae1.paintSprites(blue_sprites_list)
-                if keys2[pygame.K_d] and playerHyphae1.rect.x < world_dimensions[0] - 22:
-                    playerHyphae1.moveRight(12)
-                    playerHyphae1.paintSprites(blue_sprites_list)
-                if keys2[pygame.K_s] and playerHyphae1.rect.y < world_dimensions[1] - 22:
-                    playerHyphae1.moveUp(12)
-                    playerHyphae1.paintSprites(blue_sprites_list)
-                if keys2[pygame.K_w]  and playerHyphae1.rect.y > 2:
-                    playerHyphae1.moveDown(12)
-                    playerHyphae1.paintSprites(blue_sprites_list)
+                
+                keys = pygame.key.get_pressed()                    
+                if keys[pygame.K_LEFT] and playerHyphae.rect.x > 2:
+                    playerHyphae.moveLeft(12)
+                    playerHyphae.paintSprites(red_sprites_list)
+                if keys[pygame.K_RIGHT] and playerHyphae.rect.x < world_dimensions[0] - 22:
+                    playerHyphae.moveRight(12)
+                    playerHyphae.paintSprites(red_sprites_list)
+                if keys[pygame.K_DOWN] and playerHyphae.rect.y < world_dimensions[1] - 22:
+                    playerHyphae.moveUp(12)
+                    playerHyphae.paintSprites(red_sprites_list)
+                if keys[pygame.K_UP]  and playerHyphae.rect.y > 2:
+                    playerHyphae.moveDown(12)
+                    playerHyphae.paintSprites(red_sprites_list)
+                
+                if playerHyphae1 in all_sprites_list:
+                    keys2 = pygame.key.get_pressed()
+                    if keys2[pygame.K_a] and playerHyphae1.rect.x > 2:
+                        playerHyphae1.moveLeft(12)
+                        playerHyphae1.paintSprites(blue_sprites_list)
+                    if keys2[pygame.K_d] and playerHyphae1.rect.x < world_dimensions[0] - 22:
+                        playerHyphae1.moveRight(12)
+                        playerHyphae1.paintSprites(blue_sprites_list)
+                    if keys2[pygame.K_s] and playerHyphae1.rect.y < world_dimensions[1] - 22:
+                        playerHyphae1.moveUp(12)
+                        playerHyphae1.paintSprites(blue_sprites_list)
+                    if keys2[pygame.K_w]  and playerHyphae1.rect.y > 2:
+                        playerHyphae1.moveDown(12)
+                        playerHyphae1.paintSprites(blue_sprites_list)
 
-            all_sprites_list.update()
+                all_sprites_list.update()
 
-            all_sprites_list.draw(sample_surface)
-            pygame.display.flip()
-            clock.tick(50)
-            #clock.tick(2)
-        
+                all_sprites_list.draw(sample_surface)
+                pygame.display.flip()
+                clock.tick(5)
+                #clock.tick(2)
+
+    def set_difficulty(value, difficulty):
+        while True:
+            print(value, difficulty)
+
+    # def start():
+    #     pygame.init()
+    #     surface = pygame.display.set_mode((500,500))
+    #     menu = pygame_menu.Menu('Welcome', 500, 500, theme = pygame_menu.themes.THEME_BLUE)
+    #     menu.add.text_input('Name:')
+    #     #x = menu.add.selector('Difficulty:', [('HARD', 1), ('EASY', 2)], onchange = x.get_value())
+    #     #y = x.get_value()
+    #     #print(y)
+    #     #menu.add.button('Play', beginGame())
+
+    #     menu.mainloop(surface)
+    #     #menu.mainloop(surface)
+
+    # start()
+    beginGame()
+    
+
     pygame.quit()
 
 testMain()
