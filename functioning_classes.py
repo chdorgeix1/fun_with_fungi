@@ -139,7 +139,7 @@ class Sprite(pygame.sprite.Sprite):
                 if example_sprite.kind in self.dont_grow_list:
                     growth_counter += 1
                 else:
-                    if self.attack_val > example_sprite.defense_val and  random.random() > 1:#random.random() < self.growth_rate:
+                    if self.attack_val > example_sprite.defense_val and random.random() < self.growth_rate - 0.075:
                         example_sprite.setKind(self.kind)    
             if growth_counter == 9:
                 self.growth_rate = 0                             
