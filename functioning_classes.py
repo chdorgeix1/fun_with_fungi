@@ -8,6 +8,7 @@ global player2species
 
 global kind_sprite_dict 
 kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]], 
+                    'food_sprite': [(0,250,0), 0, 0, 0, [None]], 
                     'impass_sprite_1': [(75,50,50), 0, 1000, 0, [None]], 
                     'impass_sprite_2': [(75,50,55), 0, 1000, 0, [None]],
                     'slime_sprite_1': [(250,190,190), 10, 10, 0.001, ['slime_sprite_1', 'exp_sprite_1', 'hyphae']], 
@@ -23,6 +24,10 @@ kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]],
 
 global sprite_dict
 sprite_dict = {}
+
+global trait_point_dict
+trait_point_dict = {'1': 0, '2': 0}
+
 
 # All hyphae have:
 # height
@@ -53,6 +58,8 @@ class slimeHyphae(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  
     
     def paint_kind(self):
+        if sprite_dict[self.rect.x, self.rect.y].kind == 'food_sprite':
+            trait_point_dict[self.paintkind[-1:]] += 1
         sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind)
     
     def getLoc(self):
@@ -112,6 +119,8 @@ class durableHyphae(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  
     
     def paint_kind(self):
+        if sprite_dict[self.rect.x, self.rect.y].kind == 'food_sprite':
+            trait_point_dict[self.paintkind[-1:]] += 1
         sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind)
     
     def getLoc(self):
@@ -171,6 +180,8 @@ class poisonHyphae(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  
     
     def paint_kind(self):
+        if sprite_dict[self.rect.x, self.rect.y].kind == 'food_sprite':
+            trait_point_dict[self.paintkind[0][-1:]] += 1
         if random.random() < 0.75:
             sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[0])
         else:
@@ -258,6 +269,8 @@ class Sprite(pygame.sprite.Sprite):
                     growth_counter += 1
                 else:
                     if self.attack_val > example_sprite.defense_val and random.random() < self.growth_rate:
+                        if example_sprite.kind == 'food_sprite':
+                            trait_point_dict[self.kind[-1:]] += 1
                         if self.kind == 'armor_sprite_1':
                             example_sprite.setKind('durable_sprite_1')    
                         elif self.kind == 'armor_sprite_2':
@@ -267,7 +280,6 @@ class Sprite(pygame.sprite.Sprite):
             if growth_counter == 9:
                 self.growth_rate = 0                             
                                 
-
 def updateSprites():
     cell_list = list(range(0,len(all_sprites_list)))
     for i in range(len(all_sprites_list)):
@@ -339,10 +351,13 @@ def generateWorld(world_dimensions, player1species, player2species):
 
     for i in range(2, world_dimensions[0]-6, 12):
         for j in range(2, world_dimensions[1]-6, 12):
-            y = Sprite(sprite_size[0], sprite_size[1], i, j, 'base_sprite')
+            if random.random() > 0.99:
+                y = Sprite(sprite_size[0], sprite_size[1], i, j, 'food_sprite')
+            else:
+                y = Sprite(sprite_size[0], sprite_size[1], i, j, 'base_sprite')
             all_sprites_list.add(y)
             sprite_dict.update({(y.rect[0], y.rect[1]): y})
-    
+
     P1Hyphae.rect.x = 470
     P1Hyphae.rect.y = 470
 
@@ -390,6 +405,8 @@ while not exit:
     all_sprites_list.update()
     all_sprites_list.draw(sample_surface)
     pygame.display.flip()
+
+    print(trait_point_dict)
 
     updateSprites()
     
