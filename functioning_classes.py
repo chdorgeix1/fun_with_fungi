@@ -22,6 +22,8 @@ kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]],
                     'exp_sprite_1': [(50,50,250), 0, 0, 0, [None]], 
                     'exp_sprite_2': [(230,50,230), 0, 0, 0, [None]]}
 
+def updateTraitList(player_species, current_trait_list):
+    None
 global sprite_dict
 sprite_dict = {}
 
@@ -68,20 +70,35 @@ class slimeHyphae(pygame.sprite.Sprite):
     def moveRight(self, pixels):
         self.rect.x += pixels
         self.paint_kind()
+        if self.rect.x < world_dimensions[0] - 12:
+            self.rect.x += pixels
+            self.paint_kind()
 
     def moveLeft(self, pixels):
         self.rect.x -= pixels
         self.paint_kind()
+        if self.rect.x > 2:
+            self.rect.x -= pixels
+            self.paint_kind()
 
     def moveUp(self, pixels):
         self.rect.y += pixels
         self.paint_kind()
+        if self.rect.y < world_dimensions[1] - 12:
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveDown(self, pixels):
         self.rect.y -= pixels
         self.paint_kind()
+        if self.rect.y > 2:
+            self.rect.y -= pixels
+            self.paint_kind()
 
     def moveUpLeft(self, pixels):
+        self.rect.x -= pixels
+        self.rect.y += pixels
+        self.paint_kind()
         self.rect.x -= pixels
         self.rect.y += pixels
         self.paint_kind()
@@ -90,13 +107,22 @@ class slimeHyphae(pygame.sprite.Sprite):
         self.rect.x += pixels
         self.rect.y += pixels
         self.paint_kind()
+        self.rect.x += pixels
+        self.rect.y += pixels
+        self.paint_kind()
 
     def moveDownLeft(self, pixels):
         self.rect.y -= pixels
         self.rect.x -= pixels
         self.paint_kind()
+        self.rect.y -= pixels
+        self.rect.x -= pixels
+        self.paint_kind()
 
     def moveDownRight(self, pixels):
+        self.rect.y -= pixels
+        self.rect.x += pixels
+        self.paint_kind()
         self.rect.y -= pixels
         self.rect.x += pixels
         self.paint_kind()
@@ -399,7 +425,7 @@ count = 0
 exit = False
 world_dimensions = [506, 506]
 
-all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 0)
+all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 1, player2species = 0)
 
 while not exit:
     all_sprites_list.update()
