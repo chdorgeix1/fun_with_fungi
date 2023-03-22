@@ -22,14 +22,46 @@ kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]],
                     'exp_sprite_1': [(50,50,250), 0, 0, 0, [None]], 
                     'exp_sprite_2': [(230,50,230), 0, 0, 0, [None]]}
 
-def updateTraitList(player_species, current_trait_list):
-    None
+
 global sprite_dict
 sprite_dict = {}
 
 global trait_point_dict
 trait_point_dict = {'1': 0, '2': 0}
 
+global slime_mold_trait_dict_1
+slime_mold_trait_dict_1 = {'splitting_cells': 0, 'plasmodium': 0, 'bouncing_plasmodium': 0,  #plasmodium abilities
+                           'random_hyphae': 0, 'seeking_hyphae': 0,'food_hyphae': 0, '2_ai_hyphae': 0, #hyphae abilities
+                           'faster_growth':0, 'stronger_attack': 0, 'exponential_growth': 0, #growth increase and EG ability
+                           'pierching_hyphae': 0} #ultimate
+
+global durable_fungi_trait_dict_1
+durable_fungi_trait_dict_1 = {'short_tough_wall': 0, 'short_impenetrable_wall': 0, 'long_impenetrable_wall': 0, #defensive wall
+                              'armored_cells_grow': 0, 'stronger_armored_cells': 0, '?': 0, #improved armored cells
+                              'spread_spores': 0, 'longer_spore_range': 0, 'larger_spores': 0, #spore spreading ability
+                              'ultimate?': 0} 
+
+global poison_fungi_trait_dict_1
+poison_fungi_trait_dict_1 = {'growth_buff': 0, 'defense_buff': 0, 'attack_buff': 0, #buffing poison
+                             'slow_growth_poison': 0, 'no_growth_poison': 0, 'death_poison': 0, #area denial/attacking poison
+                             'larger_exp_blast': 0, 'lingering_poison':0, #improving poison explosive cells
+                             '': 0} #ultimate
+
+global slime_mold_trait_dict_2
+slime_mold_trait_dict_2 = {'splitting_cells': 0, 'plasmodium': 0, 'bouncing_plasmodium': 0,  #plasmodium abilities
+                           'random_hyphae': 0, 'seeking_hyphae': 0,'food_hyphae': 0, '2_ai_hyphae': 0, #hyphae abilities
+                           'faster_growth':0, 'stronger_attack': 0, 'exponential_growth': 0, #growth increase and EG ability
+                           'pierching_hyphae': 0} #ultimate
+
+global durable_fungi_trait_dict_2
+durable_fungi_trait_dict_2 = {'short_tough_wall': 0, 'short_impenetrable_wall': 0, 'long_impenetrable_wall': 0, #defensive wall
+                              'armored_cells_grow': 0, 'stronger_armored_cells': 0, '?': 0, #improved armored cells
+                              'spread_spores': 0, 'longer_spore_range': 0, 'larger_spores': 0, #spore spreading ability
+                              'ultimate?': 0} 
+
+
+#if example_dict['multiple_hyphae'] == 1:
+#    y += 1
 
 # All hyphae have:
 # height
@@ -41,6 +73,10 @@ trait_point_dict = {'1': 0, '2': 0}
 # All Hyphae can:
 # move()
 # return their loc
+
+def updateTraitList(player_species, current_trait_list):
+    None
+
 
 class slimeHyphae(pygame.sprite.Sprite):
     def __init__(self, color, height, width, kind, paintkind):
