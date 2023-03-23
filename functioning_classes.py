@@ -44,20 +44,16 @@ durable_fungi_trait_dict_1 = {'short_tough_wall': 0, 'short_impenetrable_wall': 
 global poison_fungi_trait_dict_1
 poison_fungi_trait_dict_1 = {'growth_buff': 0, 'defense_buff': 0, 'attack_buff': 0, #buffing poison
                              'slow_growth_poison': 0, 'no_growth_poison': 0, 'death_poison': 0, #area denial/attacking poison
-                             'larger_exp_blast': 0, 'lingering_poison':0, #improving poison explosive cells
+                             'increased_exp_rate': 0, 'larger_exp_blast': 0, 'lingering_poison':0, #improving poison explosive cells
                              '': 0} #ultimate
 
-global slime_mold_trait_dict_2
-slime_mold_trait_dict_2 = {'splitting_cells': 0, 'plasmodium': 0, 'bouncing_plasmodium': 0,  #plasmodium abilities
-                           'random_hyphae': 0, 'seeking_hyphae': 0,'food_hyphae': 0, '2_ai_hyphae': 0, #hyphae abilities
-                           'faster_growth':0, 'stronger_attack': 0, 'exponential_growth': 0, #growth increase and EG ability
-                           'pierching_hyphae': 0} #ultimate
+global armor_cell_grow_1
+armor_cell_grow_1 = True
 
-global durable_fungi_trait_dict_2
-durable_fungi_trait_dict_2 = {'short_tough_wall': 0, 'short_impenetrable_wall': 0, 'long_impenetrable_wall': 0, #defensive wall
-                              'armored_cells_grow': 0, 'stronger_armored_cells': 0, '?': 0, #improved armored cells
-                              'spread_spores': 0, 'longer_spore_range': 0, 'larger_spores': 0, #spore spreading ability
-                              'ultimate?': 0} 
+global armor_cell_grow_2
+armor_cell_grow_2 = False
+
+###### Need to duplicate trait_dicts when finished!
 
 
 #if example_dict['multiple_hyphae'] == 1:
@@ -307,8 +303,22 @@ class Sprite(pygame.sprite.Sprite):
                         pygame.Rect(0, 0, width, height))
     
     def setKind(self, new_kind):
-        self.kind = new_kind
-        self.color, self.attack_val, self.defense_val, self.growth_rate, self.dont_grow_list = self.getAttributes(self.kind)
+        if self.kind == 'exp_sprite_1' or self.kind == 'exp_sprite_2':
+            growth_list = []
+            self.kind = 'base_sprite'
+            self.color, self.attack_val, self.defense_val, self.growth_rate, self.dont_grow_list = self.getAttributes(self.kind)
+            for i in [-24, -12, 0, 12, 24]:
+                for j in [-24, -12, 0, 12, 24]:
+                    if (self.rect.x + i > 0 and self.rect.x + i < world_dimensions[0]) and (self.rect.y + j > 0 and self.rect.y + j < world_dimensions[1]):
+                        growth_list.append((self.rect.x + i, self.rect.y + j))
+            for loc in growth_list:
+                example_sprite = sprite_dict[loc]
+                example_sprite.setKind('base_sprite')
+
+        # Need to fix above code ^
+        else:
+            self.kind = new_kind
+            self.color, self.attack_val, self.defense_val, self.growth_rate, self.dont_grow_list = self.getAttributes(self.kind)
         pygame.draw.rect(self.image, self.color,
                             pygame.Rect(0, 0, self.width, self.height))
 
@@ -330,12 +340,13 @@ class Sprite(pygame.sprite.Sprite):
                 if example_sprite.kind in self.dont_grow_list:
                     growth_counter += 1
                 else:
+                    #armor_cell_grow_1 = True
                     if self.attack_val > example_sprite.defense_val and random.random() < self.growth_rate:
                         if example_sprite.kind == 'food_sprite':
                             trait_point_dict[self.kind[-1:]] += 1
-                        if self.kind == 'armor_sprite_1':
+                        if self.kind == 'armor_sprite_1' and armor_cell_grow_1 != True:
                             example_sprite.setKind('durable_sprite_1')    
-                        elif self.kind == 'armor_sprite_2':
+                        elif self.kind == 'armor_sprite_2'and armor_cell_grow_1 != True:
                             example_sprite.setKind('durable_sprite_2')
                         else:
                             example_sprite.setKind(self.kind)
@@ -429,7 +440,6 @@ def generateWorld(world_dimensions, player1species, player2species):
     sprite1 = sprite_dict[470,470]      
 
     sprite2 = sprite_dict[26,26]      
-    sprite2.setKind('durable_sprite_1')
 
     if player1species == 0:
         sprite1.setKind('durable_sprite_1')
@@ -447,7 +457,7 @@ def generateWorld(world_dimensions, player1species, player2species):
         sprite2.setKind('slime_sprite_2')
 
     if player2species == 2:
-        sprite1.setKind('poison_sprite_2')
+        sprite2.setKind('poison_sprite_2')
 
     all_sprites_list.add(sprite1)
     all_sprites_list.add(P1Hyphae)
@@ -459,9 +469,9 @@ def generateWorld(world_dimensions, player1species, player2species):
 
 count = 0
 exit = False
-world_dimensions = [506, 506]
+world_dimensions = [506, 506] #506
 
-all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 1, player2species = 0)
+all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 2)
 
 while not exit:
     all_sprites_list.update()
