@@ -11,16 +11,16 @@ kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]],
                     'food_sprite': [(0,250,0), 0, 0, 0, [None]], 
                     'impass_sprite_1': [(75,50,50), 0, 1000, 0, [None]], 
                     'impass_sprite_2': [(75,50,55), 0, 1000, 0, [None]],
-                    'slime_sprite_1': [(250,190,190), 10, 10, 0.001, ['slime_sprite_1', 'exp_sprite_1', 'hyphae']], 
-                    'slime_sprite_2': [(220,240,200), 10, 10, 0.001, ['slime_sprite_2', 'exp_sprite_2', 'hyphae']],
+                    'slime_sprite_1': [(250,190,190), 10, 10, 0.001, ['slime_sprite_1', 'hyphae']], 
+                    'slime_sprite_2': [(220,240,200), 10, 10, 0.001, ['slime_sprite_2', 'hyphae']],
                     'durable_sprite_1': [(120,180,100), 20, 20, 0.005, ['durable_sprite_1','armor_sprite_1', 'hyphae']], 
                     'durable_sprite_2': [(120,100,160), 20, 20, 0.005, ['durable_sprite_2','armor_sprite_2', 'hyphae']],
                     'poison_sprite_1': [(100,100,200), 15, 15, 0.0075, ['poison_sprite_1', 'exp_sprite_1', 'hyphae']], 
                     'poison_sprite_2': [(130,100,130), 15, 15, 0.0075, ['poison_sprite_2', 'exp_sprite_2', 'hyphae']],
                     'armor_sprite_1': [(50,100,50), 20, 30, 0.005, ['durable_sprite_1','armor_sprite_1', 'hyphae']], 
                     'armor_sprite_2': [(50,100,120), 20, 30, 0.005, ['durable_sprite_2','armor_sprite_2', 'hyphae']],
-                    'exp_sprite_1': [(50,50,250), 0, 0, 0, [None]], 
-                    'exp_sprite_2': [(230,50,230), 0, 0, 0, [None]]}
+                    'exp_sprite_1': [(50,50,250), 0, 0, 0, ['poison_sprite_1', 'exp_sprite_1', 'hyphae']], 
+                    'exp_sprite_2': [(230,50,230), 0, 0, 0, ['poison_sprite_2', 'exp_sprite_2', 'hyphae']]}
 
 
 global sprite_dict
@@ -48,7 +48,7 @@ poison_fungi_trait_dict_1 = {'growth_buff': 0, 'defense_buff': 0, 'attack_buff':
                              '': 0} #ultimate
 
 global armor_cell_grow_1
-armor_cell_grow_1 = True
+armor_cell_grow_1 = False
 
 global armor_cell_grow_2
 armor_cell_grow_2 = False
@@ -240,10 +240,13 @@ class poisonHyphae(pygame.sprite.Sprite):
     def paint_kind(self):
         if sprite_dict[self.rect.x, self.rect.y].kind == 'food_sprite':
             trait_point_dict[self.paintkind[0][-1:]] += 1
-        if random.random() < 0.75:
-            sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[0])
+        if sprite_dict[self.rect.x, self.rect.y].kind == 'exp_sprite_1' or sprite_dict[self.rect.x, self.rect.y].kind == 'exp_sprite_2':
+            None
         else:
-            sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[1])
+            if random.random() < 0.75:
+                sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[0])
+            else:
+                sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[1])
 
     def getLoc(self):
         return [self.rect.x, self.rect.y]
@@ -304,16 +307,22 @@ class Sprite(pygame.sprite.Sprite):
     
     def setKind(self, new_kind):
         if self.kind == 'exp_sprite_1' or self.kind == 'exp_sprite_2':
+            exp_dont_kill_list = self.dont_grow_list
+            
             growth_list = []
             self.kind = 'base_sprite'
             self.color, self.attack_val, self.defense_val, self.growth_rate, self.dont_grow_list = self.getAttributes(self.kind)
-            for i in [-24, -12, 0, 12, 24]:
-                for j in [-24, -12, 0, 12, 24]:
+            for i in [-36, -24, -12, 0, 12, 24, 36]:
+                for j in [-36, -24, -12, 0, 12, 24, 36]:
                     if (self.rect.x + i > 0 and self.rect.x + i < world_dimensions[0]) and (self.rect.y + j > 0 and self.rect.y + j < world_dimensions[1]):
                         growth_list.append((self.rect.x + i, self.rect.y + j))
+            #print(growth_list)
             for loc in growth_list:
                 example_sprite = sprite_dict[loc]
-                example_sprite.setKind('base_sprite')
+                if str(example_sprite.kind) in exp_dont_kill_list:
+                    None
+                else:
+                    example_sprite.setKind('base_sprite')
 
         # Need to fix above code ^
         else:
@@ -471,14 +480,14 @@ count = 0
 exit = False
 world_dimensions = [506, 506] #506
 
-all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 2)
+all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 1)
 
 while not exit:
     all_sprites_list.update()
     all_sprites_list.draw(sample_surface)
     pygame.display.flip()
 
-    print(trait_point_dict)
+    #print(trait_point_dict)
 
     updateSprites()
     
@@ -497,7 +506,7 @@ while not exit:
     pygame.display.flip()
     
     clock.tick(15)
-    print(count)
+    #print(count)
     count += 1 
 
 ### If you are a normal sprite you make more sprites of your own kind
