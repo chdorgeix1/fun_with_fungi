@@ -11,8 +11,8 @@ kind_sprite_dict = {'base_sprite': [(0,0,0), 0, 0, 0, [None]],
                     'food_sprite': [(0,250,0), 0, 0, 0, [None]], 
                     'impass_sprite_1': [(75,50,50), 0, 1000, 0, [None]], 
                     'impass_sprite_2': [(75,50,55), 0, 1000, 0, [None]],
-                    'slime_sprite_1': [(250,190,190), 10, 10, 0.001, ['slime_sprite_1', 'hyphae']], 
-                    'slime_sprite_2': [(220,240,200), 10, 10, 0.001, ['slime_sprite_2', 'hyphae']],
+                    'slime_sprite_1': [(250,190,190), 30, 10, 0.025, ['slime_sprite_1', 'hyphae']], 
+                    'slime_sprite_2': [(220,240,200), 30, 10, 0.025, ['slime_sprite_2', 'hyphae']],
                     'durable_sprite_1': [(120,180,100), 20, 20, 0.005, ['durable_sprite_1','armor_sprite_1', 'hyphae']], 
                     'durable_sprite_2': [(120,100,160), 20, 20, 0.005, ['durable_sprite_2','armor_sprite_2', 'hyphae']],
                     'poison_sprite_1': [(100,100,200), 15, 15, 0.0075, ['poison_sprite_1', 'exp_sprite_1', 'hyphae']], 
@@ -185,40 +185,48 @@ class durableHyphae(pygame.sprite.Sprite):
         return [self.rect.x, self.rect.y]
 
     def moveRight(self, pixels):
-        self.rect.x += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y].kind in [kind_sprite_dict[self.paintkind], 'base_sprite']:
+            self.rect.x += pixels
+            self.paint_kind()
 
     def moveLeft(self, pixels):
-        self.rect.x -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y].kind in [self.paintkind, 'base_sprite']:
+            self.rect.x -= pixels
+            self.paint_kind()
 
     def moveUp(self, pixels):
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x, self.rect.y + pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveDown(self, pixels):
-        self.rect.y -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x, self.rect.y - pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.y -= pixels
+            self.paint_kind()
 
     def moveUpLeft(self, pixels):
-        self.rect.x -= pixels
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y + pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.x -= pixels
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveUpRight(self, pixels):
-        self.rect.x += pixels
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y + pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.x += pixels
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveDownLeft(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y - pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.y -= pixels
+            self.rect.x -= pixels
+            self.paint_kind()
 
     def moveDownRight(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y - pixels].kind in [self.paintkind, 'base_sprite']:
+            self.rect.y -= pixels
+            self.rect.x += pixels
+            self.paint_kind()
 
 class poisonHyphae(pygame.sprite.Sprite):
     def __init__(self, color, height, width, kind, paintkind):
@@ -252,40 +260,48 @@ class poisonHyphae(pygame.sprite.Sprite):
         return [self.rect.x, self.rect.y]
 
     def moveRight(self, pixels):
-        self.rect.x += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.x += pixels
+            self.paint_kind()
 
     def moveLeft(self, pixels):
-        self.rect.x -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.x -= pixels
+            self.paint_kind()
 
     def moveUp(self, pixels):
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveDown(self, pixels):
-        self.rect.y -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.y -= pixels
+            self.paint_kind()
 
     def moveUpLeft(self, pixels):
-        self.rect.x -= pixels
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.x -= pixels
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveUpRight(self, pixels):
-        self.rect.x += pixels
-        self.rect.y += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.x += pixels
+            self.rect.y += pixels
+            self.paint_kind()
 
     def moveDownLeft(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x -= pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x - pixels, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.y -= pixels
+            self.rect.x -= pixels
+            self.paint_kind()
 
     def moveDownRight(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x += pixels
-        self.paint_kind()
+        if sprite_dict[self.rect.x + pixels, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
+            self.rect.y -= pixels
+            self.rect.x += pixels
+            self.paint_kind()
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, height, width, x_loc, y_loc, kind):
@@ -312,8 +328,8 @@ class Sprite(pygame.sprite.Sprite):
             growth_list = []
             self.kind = 'base_sprite'
             self.color, self.attack_val, self.defense_val, self.growth_rate, self.dont_grow_list = self.getAttributes(self.kind)
-            for i in [-36, -24, -12, 0, 12, 24, 36]:
-                for j in [-36, -24, -12, 0, 12, 24, 36]:
+            for i in [-48, -36, -24, -12, 0, 12, 24, 36, 48]:
+                for j in [-48, -36, -24, -12, 0, 12, 24, 36, 48]:
                     if (self.rect.x + i > 0 and self.rect.x + i < world_dimensions[0]) and (self.rect.y + j > 0 and self.rect.y + j < world_dimensions[1]):
                         growth_list.append((self.rect.x + i, self.rect.y + j))
             #print(growth_list)
@@ -480,7 +496,7 @@ count = 0
 exit = False
 world_dimensions = [506, 506] #506
 
-all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 1)
+all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 0)
 
 while not exit:
     all_sprites_list.update()
