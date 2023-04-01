@@ -34,7 +34,7 @@ global slime_mold_trait_dict_1
 slime_mold_trait_dict_1 = {'splitting_cells': 0, 'plasmodium': 0, 'bouncing_plasmodium': 0,  #plasmodium abilities
                            'random_hyphae': 0, 'seeking_hyphae': 0,'food_hyphae': 0, '2_ai_hyphae': 0, #hyphae abilities
                            'faster_growth':0, 'stronger_attack': 0, 'exponential_growth': 0, #growth increase and EG ability
-                           'pierching_hyphae': 0} #ultimate
+                           'piercing_hyphae': 0} #ultimate
 
 global durable_fungi_trait_dict_1
 durable_fungi_trait_dict_1 = {'short_tough_wall': 0, 'short_impenetrable_wall': 0, 'long_impenetrable_wall': 0, #defensive wall
@@ -498,7 +498,7 @@ def generateWorld(world_dimensions, player1species, player2species):
 count = 0
 exit = False
 world_dimensions = [506, 506] #506
-player1species = 2
+player1species = 1
 player2species = 0
 
 # Using pygame_menu the following function creates a menu for the user to select the game mode

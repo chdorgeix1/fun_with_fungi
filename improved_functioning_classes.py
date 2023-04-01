@@ -47,6 +47,25 @@ poison_fungi_trait_dict_1 = {'growth_buff': 0, 'defense_buff': 0, 'attack_buff':
                              'increased_exp_rate': 0, 'larger_exp_blast': 0, 'lingering_poison':0, #improving poison explosive cells
                              '': 0} #ultimate
 
+global slime_mold_trait_dict_2
+slime_mold_trait_dict_2 = {'splitting_cells': 0, 'plasmodium': 0, 'bouncing_plasmodium': 0,  #plasmodium abilities
+                           'random_hyphae': 0, 'seeking_hyphae': 0,'food_hyphae': 0, '2_ai_hyphae': 0, #hyphae abilities
+                           'faster_growth':0, 'stronger_attack': 0, 'exponential_growth': 0, #growth increase and EG ability
+                           'pierching_hyphae': 0} #ultimate
+
+global durable_fungi_trait_dict_2
+durable_fungi_trait_dict_2 = {'short_tough_wall': 0, 'short_impenetrable_wall': 0, 'long_impenetrable_wall': 0, #defensive wall
+                              'armored_cells_grow': 0, 'stronger_armored_cells': 0, '?': 0, #improved armored cells
+                              'spread_spores': 0, 'longer_spore_range': 0, 'larger_spores': 0, #spore spreading ability
+                              'ultimate?': 0} 
+
+global poison_fungi_trait_dict_2
+poison_fungi_trait_dict_2 = {'growth_buff': 0, 'defense_buff': 0, 'attack_buff': 0, #buffing poison
+                             'slow_growth_poison': 0, 'no_growth_poison': 0, 'death_poison': 0, #area denial/attacking poison
+                             'increased_exp_rate': 0, 'larger_exp_blast': 0, 'lingering_poison':0, #improving poison explosive cells
+                             '': 0} #ultimate
+
+
 global armor_cell_grow_1
 armor_cell_grow_1 = False
 
@@ -115,7 +134,6 @@ class slimeHyphae(pygame.sprite.Sprite):
             self.rect.move_ip(dx, dy)
             self.paint_kind()
             
- 
 class DurableHyphae(pygame.sprite.Sprite):
     """
     A sprite representing a durable hyphae.
@@ -397,13 +415,16 @@ def generateWorld(world_dimensions, player1species, player2species):
 
     return all_sprites_list, sample_surface, P1Hyphae, P2Hyphae
 
-def updateTraits():
+def traitMenu():
     global trait_point_dict
     global player1species
     global player2species
     print(player1species)
     print(player2species)
     print(trait_point_dict)
+
+    
+
     #def player1player vs ai
     # def player 1 species
     # def map size
@@ -417,7 +438,7 @@ exit = False
 global world_dimensions
 world_dimensions = [506, 506] #506
 player1species = 2
-player2species = 1
+player2species = 0
 
 
 all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species, player2species)
