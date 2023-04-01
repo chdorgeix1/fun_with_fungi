@@ -492,11 +492,24 @@ def generateWorld(world_dimensions, player1species, player2species):
 
     return all_sprites_list, sample_surface, P1Hyphae, P2Hyphae
 
+def gameMenu():
+    #def player1player vs ai
+    # def player 1 species
+    # def map size
+    # def startGAme()
+
+
+
+
 count = 0
 exit = False
 world_dimensions = [506, 506] #506
+player1species = 2
+player2species = 0
 
-all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species = 2, player2species = 0)
+gameMenu()
+
+all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species, player2species)
 
 while not exit:
     all_sprites_list.update()
