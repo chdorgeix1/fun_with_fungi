@@ -1,1 +1,0 @@
-# this file will contain the kind of sprites and the traits dictionaries for the game
