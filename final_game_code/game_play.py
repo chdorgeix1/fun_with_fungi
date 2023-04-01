@@ -2,20 +2,12 @@
 
 import pygame
 import hyphae_classes
-
-
-
 import game_dicts
 
-player_1_trait_dict = game_dicts.slime_mold_trait_dict
+p1Hyphae = hyphae_classes.DurableHyphae(color = (255,0,0), height =20, width = 20)
+p2Hyphae = hyphae_classes.DurableHyphae(color = (0,255,0), height =20, width = 20)
 
-player_2_trait_dict = game_dicts.slime_mold_trait_dict
+p1Hyphae.move(10,10)
 
-player_1_trait_dict['splitting_cells'] = 1
-
-print(player_1_trait_dict['splitting_cells'])
-print(player_2_trait_dict['splitting_cells'])
-
-#p1Hyphae = hyphae_classes.slimeHyphae((255,0,0), 20, 20, 'bug', 'bugs1')
-
-#p1Hyphae.paint_kind()
+print(p1Hyphae.rect.x, p1Hyphae.rect.y)
+print(p2Hyphae.rect.x, p2Hyphae.rect.y)
