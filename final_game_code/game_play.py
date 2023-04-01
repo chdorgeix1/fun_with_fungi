@@ -11,4 +11,6 @@ p1Sprite = sprite.FoodSprite(5, 5)
 
 # a: because you are not passing in the x_loc argument in the FoodSprite class
 
+print(p1Sprite.__class__ == sprite.FoodSprite)
+
 print(p1Sprite.color, p1Sprite.height, p1Sprite.width)
