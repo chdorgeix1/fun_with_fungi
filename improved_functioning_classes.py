@@ -1,6 +1,5 @@
 import pygame
 import random
-import pygame_menu
 
 clock = pygame.time.Clock()
 
@@ -74,7 +73,6 @@ armor_cell_grow_2 = False
 def updateTraitList(player_species, current_trait_list):
     None
 
-
 class slimeHyphae(pygame.sprite.Sprite):
     def __init__(self, color, height, width, kind, paintkind):
         super().__init__()
@@ -97,69 +95,27 @@ class slimeHyphae(pygame.sprite.Sprite):
             trait_point_dict[self.paintkind[-1:]] += 1
         sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind)
     
-    def getLoc(self):
+    def get_loc(self):
         return [self.rect.x, self.rect.y]
 
-    def moveRight(self, pixels):
-        self.rect.x += pixels
+    def move(self, dx, dy):
+        """
+        Move the hyphae by the given amount of pixels in the x and y directions.
+
+        Parameters:
+        dx (int): the number of pixels to move the hyphae in the x direction.
+        dy (int): the number of pixels to move the hyphae in the y direction.
+        """
+
+        self.rect.move_ip(dx, dy)
         self.paint_kind()
-        if self.rect.x < world_dimensions[0] - 12:
-            self.rect.x += pixels
+        # check that the current self get_loc is within the dimensions of the world 
+        # and if it is move the hyphae
+        if (self.rect.x + dx >= 0 and self.rect.x + dx <= world_dimensions[0] -12)  and (self.rect.y + dy >= 0 and self.rect.y + dy <= world_dimensions[1] -12):
+            self.rect.move_ip(dx, dy)
             self.paint_kind()
-
-    def moveLeft(self, pixels):
-        self.rect.x -= pixels
-        self.paint_kind()
-        if self.rect.x > 2:
-            self.rect.x -= pixels
-            self.paint_kind()
-
-    def moveUp(self, pixels):
-        self.rect.y += pixels
-        self.paint_kind()
-        if self.rect.y < world_dimensions[1] - 12:
-            self.rect.y += pixels
-            self.paint_kind()
-
-    def moveDown(self, pixels):
-        self.rect.y -= pixels
-        self.paint_kind()
-        if self.rect.y > 2:
-            self.rect.y -= pixels
-            self.paint_kind()
-
-    def moveUpLeft(self, pixels):
-        self.rect.x -= pixels
-        self.rect.y += pixels
-        self.paint_kind()
-        self.rect.x -= pixels
-        self.rect.y += pixels
-        self.paint_kind()
-
-    def moveUpRight(self, pixels):
-        self.rect.x += pixels
-        self.rect.y += pixels
-        self.paint_kind()
-        self.rect.x += pixels
-        self.rect.y += pixels
-        self.paint_kind()
-
-    def moveDownLeft(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x -= pixels
-        self.paint_kind()
-        self.rect.y -= pixels
-        self.rect.x -= pixels
-        self.paint_kind()
-
-    def moveDownRight(self, pixels):
-        self.rect.y -= pixels
-        self.rect.x += pixels
-        self.paint_kind()
-        self.rect.y -= pixels
-        self.rect.x += pixels
-        self.paint_kind()
-    
+            
+ 
 class DurableHyphae(pygame.sprite.Sprite):
     """
     A sprite representing a durable hyphae.
@@ -167,7 +123,7 @@ class DurableHyphae(pygame.sprite.Sprite):
 
     def __init__(self, color, height, width, kind, paintkind):
         """
-        Initialize a new instance of the durableHyphae class.
+        Initialize a new instance of the DurableHyphae class.
 
         Parameters:
         color (tuple): the RGB color of the hyphae.
@@ -186,33 +142,14 @@ class DurableHyphae(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect()
 
-    # def __init__(self, color, height, width, kind, paintkind):
-    #     super().__init__()
-
-    #     self.kind = kind
-    #     self.paintkind = paintkind
-    #     self.color = color
-    #     self.width = width
-    #     self.height = height
-    #     self.image = pygame.Surface([width, height])
-        
-    #     pygame.draw.rect(self.image,
-    #                     color,
-    #                     pygame.Rect(0, 0, width, height))
-
-    #     self.rect = self.image.get_rect()   
-
     def paint_kind(self):
         """
-        Paint the sprite with the hyphae's paint kind.
+        Paint the hyphae with the current paint kind.
         """
         sprite = sprite_dict[self.rect.x, self.rect.y]
         if sprite.kind == 'food_sprite':
             trait_point_dict[self.paintkind[-1:]] += 1
         sprite.setKind(self.paintkind)
-    
-    def get_loc(self):
-        return [self.rect.x, self.rect.y]
 
     def move(self, dx, dy):
         """
@@ -225,9 +162,9 @@ class DurableHyphae(pygame.sprite.Sprite):
         dest_x = self.rect.x + dx
         dest_y = self.rect.y + dy
         dest_kind = kind_sprite_dict[self.paintkind]
-        if sprite_dict[dest_x, dest_y].kind in [dest_kind, 'base_sprite']:
-            self.rect.move_ip(dx, dy)
-            self.paint_kind()
+        #if sprite_dict[dest_x, dest_y].kind in [dest_kind, 'base_sprite']:
+        self.rect.move_ip(dx, dy)
+        self.paint_kind()
 
 class poisonHyphae(pygame.sprite.Sprite):
     def __init__(self, color, height, width, kind, paintkind):
@@ -257,52 +194,19 @@ class poisonHyphae(pygame.sprite.Sprite):
             else:
                 sprite_dict[self.rect.x, self.rect.y].setKind(self.paintkind[1])
 
-    def getLoc(self):
+    def get_loc(self):
         return [self.rect.x, self.rect.y]
 
-    def moveRight(self, pixels):
-        if sprite_dict[self.rect.x + pixels, self.rect.y].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.x += pixels
-            self.paint_kind()
+    def move(self, dx, dy):
+        """
+        Move the hyphae by the given amount of pixels in the x and y directions.
 
-    def moveLeft(self, pixels):
-        if sprite_dict[self.rect.x - pixels, self.rect.y].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.x -= pixels
-            self.paint_kind()
-
-    def moveUp(self, pixels):
-        if sprite_dict[self.rect.x, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.y += pixels
-            self.paint_kind()
-
-    def moveDown(self, pixels):
-        if sprite_dict[self.rect.x, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.y -= pixels
-            self.paint_kind()
-
-    def moveUpLeft(self, pixels):
-        if sprite_dict[self.rect.x - pixels, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.x -= pixels
-            self.rect.y += pixels
-            self.paint_kind()
-
-    def moveUpRight(self, pixels):
-        if sprite_dict[self.rect.x + pixels, self.rect.y + pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.x += pixels
-            self.rect.y += pixels
-            self.paint_kind()
-
-    def moveDownLeft(self, pixels):
-        if sprite_dict[self.rect.x - pixels, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.y -= pixels
-            self.rect.x -= pixels
-            self.paint_kind()
-
-    def moveDownRight(self, pixels):
-        if sprite_dict[self.rect.x + pixels, self.rect.y - pixels].kind in [self.paintkind[0], self.paintkind[1], 'base_sprite']:
-            self.rect.y -= pixels
-            self.rect.x += pixels
-            self.paint_kind()
+        Parameters:
+        dx (int): the number of pixels to move the hyphae in the x direction.
+        dy (int): the number of pixels to move the hyphae in the y direction.
+        """
+        self.rect.move_ip(dx, dy)
+        self.paint_kind()
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, height, width, x_loc, y_loc, kind):
@@ -388,25 +292,25 @@ def updateSprites():
         if example_sprite.kind != 'hyphae':
             example_sprite.grow()
 
-def moveHyphae(P1Hyphae, P2Hyphae):
+def move_hyphae(P1Hyphae, P2Hyphae):
     keys = pygame.key.get_pressed()                    
     if keys[pygame.K_LEFT] and P1Hyphae.rect.x > 2:
-        P1Hyphae.moveLeft(12)
+        P1Hyphae.move(dx = -12,  dy = 0)
     if keys[pygame.K_RIGHT] and P1Hyphae.rect.x < world_dimensions[0] - 12:
-        P1Hyphae.moveRight(12)
+        P1Hyphae.move(dx = +12,  dy = 0)
     if keys[pygame.K_DOWN] and P1Hyphae.rect.y < world_dimensions[1] - 12:
-        P1Hyphae.moveUp(12)
+        P1Hyphae.move(dx = 0,  dy = 12)
     if keys[pygame.K_UP]  and P1Hyphae.rect.y > 2:
-        P1Hyphae.moveDown(12)
+        P1Hyphae.move(dx = 0,  dy = -12)
 
     if keys[pygame.K_a] and P2Hyphae.rect.x > 2:
-        P2Hyphae.moveLeft(12)
+        P2Hyphae.move(dx = -12,  dy = 0)
     if keys[pygame.K_d] and P2Hyphae.rect.x < world_dimensions[0] - 12:
-        P2Hyphae.moveRight(12)
+        P2Hyphae.move(dx = +12,  dy = 0)
     if keys[pygame.K_s] and P2Hyphae.rect.y < world_dimensions[1] - 12:
-        P2Hyphae.moveUp(12)
+        P2Hyphae.move(dx = 0,  dy = 12)
     if keys[pygame.K_w]  and P2Hyphae.rect.y > 2:
-        P2Hyphae.moveDown(12)
+        P2Hyphae.move(dx = 0,  dy = -12)
 
 def generateWorld(world_dimensions, player1species, player2species):
     #Colors
@@ -424,7 +328,7 @@ def generateWorld(world_dimensions, player1species, player2species):
     sprite_size = [10, 10]
     
     if player1species == 0:
-        P1Hyphae = durableHyphae(GREEN, sprite_size[0], sprite_size[1], 'hyphae', 'armor_sprite_1')
+        P1Hyphae = DurableHyphae(GREEN, sprite_size[0], sprite_size[1], 'hyphae', 'armor_sprite_1')
     
     if player1species == 1:
         P1Hyphae = slimeHyphae(RED, sprite_size[0], sprite_size[1], 'hyphae', 'slime_sprite_1')
@@ -433,7 +337,7 @@ def generateWorld(world_dimensions, player1species, player2species):
         P1Hyphae = poisonHyphae(PURPLE, sprite_size[0], sprite_size[1], 'hyphae', ['poison_sprite_1', 'exp_sprite_1'])
 
     if player2species == 0:
-        P2Hyphae = durableHyphae(GREEN, sprite_size[0], sprite_size[1], 'hyphae', 'armor_sprite_2')
+        P2Hyphae = DurableHyphae(GREEN, sprite_size[0], sprite_size[1], 'hyphae', 'armor_sprite_2')
     
     if player2species == 1:
         P2Hyphae = slimeHyphae(RED, sprite_size[0], sprite_size[1], 'hyphae', 'slime_sprite_2')
@@ -493,22 +397,28 @@ def generateWorld(world_dimensions, player1species, player2species):
 
     return all_sprites_list, sample_surface, P1Hyphae, P2Hyphae
 
-#The following game menu 
+def updateTraits():
+    global trait_point_dict
+    global player1species
+    global player2species
+    print(player1species)
+    print(player2species)
+    print(trait_point_dict)
+    #def player1player vs ai
+    # def player 1 species
+    # def map size
+    # def startGAme()
+
+
+
 
 count = 0
 exit = False
+global world_dimensions
 world_dimensions = [506, 506] #506
 player1species = 2
-player2species = 0
+player2species = 1
 
-# Using pygame_menu the following function creates a menu for the user to select the game mode
-def set_player_1_species(value):
-    global player1species
-    player1species == value
-
-def set_player_2_species(value):
-    global player2species
-    player2species == value
 
 all_sprites_list, sample_surface, P1Hyphae, P2Hyphae = generateWorld(world_dimensions, player1species, player2species)
 
@@ -527,8 +437,10 @@ while not exit:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_x:
                 exit = True
+            if event.key == pygame.K_t:
+                updateTraits()
     
-    moveHyphae(P1Hyphae, P2Hyphae)
+    move_hyphae(P1Hyphae, P2Hyphae)
 
     all_sprites_list.update()
     all_sprites_list.draw(sample_surface)
