@@ -56,3 +56,13 @@ class ImpassSprite(BaseSprite):
     
     def grow(self):
         None 
+
+class DurableSprite(BaseSprite):
+    def __init__(self, x_loc, y_loc, attack_score = 0, defense_score = 1000): 
+        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (100,100,100))
+
+    def getAttributes(self, kind):   
+        None
+    
+    def grow(self):
+        None 
