@@ -343,7 +343,7 @@ def generateWorld(world_dimensions, player1species, player2species):
     trait_point_dict = {RED: 0, BLUE: 0, GREEN: 0, DARKGREEN: 0}
     # World Options
     world_color = (200,200,200)
-    sprite_size = [10, 10]
+    sprite_size = [5, 5]
     
     if player1species == 0:
         P1Hyphae = DurableHyphae(GREEN, sprite_size[0], sprite_size[1], 'hyphae', 'armor_sprite_1')
@@ -370,8 +370,8 @@ def generateWorld(world_dimensions, player1species, player2species):
     sample_surface.fill((200,200,200))
     all_sprites_list = pygame.sprite.Group()
 
-    for i in range(2, world_dimensions[0]-6, 12):
-        for j in range(2, world_dimensions[1]-6, 12):
+    for i in range(2, world_dimensions[0]-6, 7):
+        for j in range(2, world_dimensions[1]-6, 7):
             if random.random() > 0.99:
                 y = Sprite(sprite_size[0], sprite_size[1], i, j, 'food_sprite')
             else:
@@ -379,38 +379,38 @@ def generateWorld(world_dimensions, player1species, player2species):
             all_sprites_list.add(y)
             sprite_dict.update({(y.rect[0], y.rect[1]): y})
 
-    P1Hyphae.rect.x = 470
-    P1Hyphae.rect.y = 470
+    #P1Hyphae.rect.x = 470
+    #P1Hyphae.rect.y = 470
 
-    P2Hyphae.rect.x = 26
-    P2Hyphae.rect.y = 26
+    #P2Hyphae.rect.x = 26
+    #P2Hyphae.rect.y = 26
 
-    sprite1 = sprite_dict[470,470]      
+    #sprite1 = sprite_dict[470,470]      
 
-    sprite2 = sprite_dict[26,26]      
+    #sprite2 = sprite_dict[26,26]      
 
-    if player1species == 0:
-        sprite1.setKind('durable_sprite_1')
+    # if player1species == 0:
+    #     sprite1.setKind('durable_sprite_1')
 
-    if player1species == 1:
-        sprite1.setKind('slime_sprite_1')
+    # if player1species == 1:
+    #     sprite1.setKind('slime_sprite_1')
 
-    if player1species == 2:
-        sprite1.setKind('poison_sprite_1')
+    # if player1species == 2:
+    #     sprite1.setKind('poison_sprite_1')
 
-    if player2species == 0:
-        sprite2.setKind('durable_sprite_2')
+    # if player2species == 0:
+    #     sprite2.setKind('durable_sprite_2')
 
-    if player2species == 1:
-        sprite2.setKind('slime_sprite_2')
+    # if player2species == 1:
+    #     sprite2.setKind('slime_sprite_2')
 
-    if player2species == 2:
-        sprite2.setKind('poison_sprite_2')
+    # if player2species == 2:
+    #     sprite2.setKind('poison_sprite_2')
 
-    all_sprites_list.add(sprite1)
-    all_sprites_list.add(P1Hyphae)
-    all_sprites_list.add(sprite2)
-    all_sprites_list.add(P2Hyphae)
+    #all_sprites_list.add(sprite1)
+    #all_sprites_list.add(P1Hyphae)
+    #all_sprites_list.add(sprite2)
+    #all_sprites_list.add(P2Hyphae)
     pygame.init()
 
     return all_sprites_list, sample_surface, P1Hyphae, P2Hyphae
@@ -436,7 +436,7 @@ def traitMenu():
 count = 0
 exit = False
 global world_dimensions
-world_dimensions = [506, 506] #506
+world_dimensions = [1202, 782] #506
 player1species = 2
 player2species = 0
 
@@ -463,12 +463,12 @@ while not exit:
     
     move_hyphae(P1Hyphae, P2Hyphae)
 
-    all_sprites_list.update()
+    #all_sprites_list.update()
     all_sprites_list.draw(sample_surface)
     
     pygame.display.flip()
     
-    clock.tick(15)
+    clock.tick(50)
     #print(count)
     count += 1 
 
