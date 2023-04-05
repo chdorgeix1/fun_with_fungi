@@ -2,8 +2,9 @@
 import pygame
 import random
 from abc import ABC, abstractmethod
+from pygame.sprite import Sprite
 
-class BaseSprite(ABC, pygame.sprite.Sprite):
+class BaseSprite(ABC, Sprite):
     def __init__(self, x_loc, y_loc, attack_score, defense_score, height, width, color):
         super().__init__()
         self.height = height
