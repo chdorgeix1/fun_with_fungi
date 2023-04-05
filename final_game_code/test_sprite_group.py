@@ -26,27 +26,6 @@ A = TestSprite()
 B = TestSprite()
 C = TestSprite()
 
-A.set_color('red')
-
-sprite_list = TestGroup()
-
-sprite_list.add(A)
-sprite_list.add(B)
-sprite_list.add(C)
-
-for sprite in sprite_list:
-    print(sprite.color)
-print('')
-sprite_list.update()
-
-for sprite in sprite_list:
-    print(sprite.color)
-
-print('')
-
-sprite_list.change_group_color('purple')
-
-sprite_list.update()
-
-for sprite in sprite_list:
-    print(sprite.color)
+from trait_tree import DurableTraitTree
+x = DurableTraitTree()
+print(x.short_tough_wall)

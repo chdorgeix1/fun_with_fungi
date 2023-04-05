@@ -3,12 +3,12 @@
 from dataclasses import dataclass
 
 @dataclass
-class DurableTraitTree:
+class DurableTraitTree():
     short_tough_wall: int = 0
     short_impenetrable_wall: int = 0
     long_impenetrable_wall: int = 0 #defensive wall
     armored_cells_grow: int = 0
-    stronger_armored_cells: int =0
+    stronger_armored_cells: int = 0
     final_armor_cell_buff: int = 0 #improved armored cells
     spread_spores: int = 0
     longer_spore_range: int = 0
@@ -17,7 +17,7 @@ class DurableTraitTree:
 
 
 @dataclass
-class PoisonTraitTree:
+class PoisonTraitTree():
     growth_buff: int = 0
     defense_buff: int = 0
     attack_buff: int = 0 #buffing poison
@@ -27,10 +27,10 @@ class PoisonTraitTree:
     increased_exp_rate: int = 0
     larger_exp_blast: int = 0
     lingering_poison: int = 0 #improving poison explosive cells
-    undetermined_ultimate: 0 #ultimate
+    undetermined_ultimate: int = 0 #ultimate
 
 @dataclass
-class SlimeTraitTree:
+class SlimeTraitTree():
     splitting_cells: int = 0
     plasmodium: int = 0
     bouncing_plasmodium: int = 0  #plasmodium abilities
