@@ -50,7 +50,7 @@ class FoodSprite(BaseSprite):
 
 class ImpassSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, attack_score = 0, defense_score = 1000): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (100,100,100))
+        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (92, 64, 51))
 
     def getAttributes(self, kind):   
         None

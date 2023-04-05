@@ -1,6 +1,8 @@
 # this file will generate the world for the game
 import pygame
 import random
+from pygame.sprite import Group
+from pygame.time import Clock
 from sprite import FoodSprite, NeutralSprite, ImpassSprite, DurableSprite
 
 # this class will generate the world for the game
@@ -12,10 +14,9 @@ class World():
         self.sprite_size = []
         self.player1species = player1species
         self.player2species = player2species
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = Group()
         pygame.display.set_caption("Fungal Warfare")
-        self.clock = pygame.time.Clock()
-        #self.pygame.display.flip()
+        self.clock = Clock()
     
     def generate_dimensions(self):
         if self.world_size == 'small':
@@ -32,7 +33,6 @@ class World():
         self.map = pygame.display.set_mode(self.dimensions)
         self.map.fill((200,200,200))
 
-    #int(self.sprite_size[0]/3)
     def draw_sprites(self):
         for i in range(2, self.dimensions[0], 2 + self.sprite_size[0]):
             for j in range(2, self.dimensions[1], 2 + self.sprite_size[1]):
@@ -42,6 +42,23 @@ class World():
                     y = FoodSprite(i, j, self.sprite_size[0], self.sprite_size[1])
                 self.all_sprites.add(y)
             
+    def draw_impass(self):
+        x_list = list(range(2, self.dimensions[0] + 2 + self.sprite_size[0], 2 + self.sprite_size[0]))
+        y_list = list(range(self.dimensions[0], 2 -(2 + self.sprite_size[0]), -(2 + self.sprite_size[0])))
+        #for i in range(self.dimensions[0], 2, -(2 + self.sprite_size[0])):
+            #for j in range(2, self.dimensions[0], (2 + self.sprite_size[0])):
+                #print(i, j)
+        #    print(i)
+        for i in range(len(x_list)):
+            x_list[i] -= int(self.dimensions[0]/60)*(2 + self.sprite_size[0])
+        
+        for i in zip(x_list, y_list):
+            for j in range((-2 - self.sprite_size[0]), 2*(2 + self.sprite_size[0]), 2 + self.sprite_size[0]):
+                for impsprite in self.all_sprites.sprites():
+                    if impsprite.rect.x == i[0] and impsprite.rect.y == i[1] + j:
+                        impsprite.kill()
+                        self.all_sprites.add(ImpassSprite(i[0], i[1] + j, self.sprite_size[0], self.sprite_size[1]))
+                
     
 
 

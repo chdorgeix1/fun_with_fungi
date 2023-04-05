@@ -47,6 +47,8 @@ new_world.generate_map()
 
 new_world.draw_sprites()
 
+new_world.draw_impass()
+
 pygame.init()
 exit = False
 count = 0
@@ -60,4 +62,7 @@ while not exit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_x:
+                exit = True
     new_world.clock.tick(50)
