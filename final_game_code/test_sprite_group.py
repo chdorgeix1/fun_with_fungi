@@ -27,5 +27,4 @@ B = TestSprite()
 C = TestSprite()
 
 from trait_tree import DurableTraitTree
-x = DurableTraitTree()
-print(x.short_tough_wall)
+

@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from pygame.sprite import Sprite
 
 class BaseSprite(ABC, Sprite):
-    def __init__(self, x_loc, y_loc, attack_score, defense_score, height, width, color):
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, color):
         super().__init__()
         self.height = height
         self.width = width
@@ -30,7 +30,7 @@ class BaseSprite(ABC, Sprite):
 
 class NeutralSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score = 0, defense_score = 0): 
-        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, 10, 10, (0,0,0))
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,0,0))
 
     def getAttributes(self, kind):   
         None
@@ -39,8 +39,8 @@ class NeutralSprite(BaseSprite):
         None 
 
 class FoodSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 0, defense_score = 0):
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (0,255,0))
+    def __init__(self, x_loc, y_loc, height, width, attack_score = 0, defense_score = 0):
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (100,200,0))
 
     def getAttributes(self, kind):   
         None

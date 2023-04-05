@@ -39,7 +39,7 @@ from world import World
 # pygame.init()
 # world1 = World([200,200], 'Durable Fungi', 'Slime Mold')
 
-new_world = World('small', 0, 1)
+new_world = World('large', 0, 1)
 
 new_world.generate_dimensions()
 
@@ -48,9 +48,16 @@ new_world.generate_map()
 new_world.draw_sprites()
 
 pygame.init()
-while True:
-    new_world.all_sprites.update()
-    new_world.all_sprites.draw(surface.surface)
+exit = False
+count = 0
+
+
+while not exit:
+    new_world.all_sprites.draw(new_world.map)
+        #new_world.map.fill((0,200,200))
+
     pygame.display.flip()
-
-
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            exit = True
+    new_world.clock.tick(50)
