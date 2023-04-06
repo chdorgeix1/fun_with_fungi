@@ -4,7 +4,8 @@ import random
 from pygame.sprite import Group
 from pygame.time import Clock
 from sprite import FoodSprite, NeutralSprite, ImpassSprite, DurableSprite
-
+from species import DurableFungiSpecies, PoisonFungiSpecies, SlimeMoldSpecies
+from player import Player
 # this class will generate the world for the game
 
 class World():
@@ -45,10 +46,7 @@ class World():
     def draw_impass(self):
         x_list = list(range(2, self.dimensions[0] + 2 + self.sprite_size[0], 2 + self.sprite_size[0]))
         y_list = list(range(self.dimensions[0], 2 -(2 + self.sprite_size[0]), -(2 + self.sprite_size[0])))
-        #for i in range(self.dimensions[0], 2, -(2 + self.sprite_size[0])):
-            #for j in range(2, self.dimensions[0], (2 + self.sprite_size[0])):
-                #print(i, j)
-        #    print(i)
+
         for i in range(len(x_list)):
             x_list[i] -= int(self.dimensions[0]/60)*(2 + self.sprite_size[0])
         
@@ -58,28 +56,32 @@ class World():
                     if impsprite.rect.x == i[0] and impsprite.rect.y == i[1] + j:
                         impsprite.kill()
                         self.all_sprites.add(ImpassSprite(i[0], i[1] + j, self.sprite_size[0], self.sprite_size[1]))
-                
+
+    def generate_players(self):
+        if self.player1species == 0:
+            Player1 = Player(DurableFungiSpecies)
+        elif self.player1species == 1:
+            Player1 = Player(PoisonFungiSpecies)
+        else:
+            Player1 = Player(SlimeMoldSpecies)
+
+        if self.player2species == 0:
+            Player2 = Player(DurableFungiSpecies)
+        elif self.player2species == 1:
+            Player2 = Player(PoisonFungiSpecies)
+        else:
+            Player2 = Player(SlimeMoldSpecies)
+        
+        return Player1, Player2
+    
+    def draw_players():
+        if random.random() > 0.5:
+            
     
 
 
 def generateWorld(world_dimensions, player1species, player2species):
 
-
-    
-    food_rate = 0.01
-
-    sample_surface = pygame.display.set_mode((world_dimensions[0], world_dimensions[1]))
-    sample_surface.fill((200,200,200))
-    all_sprites_list = pygame.sprite.Group()
-
-    for i in range(2, world_dimensions[0]-6, 12):
-        for j in range(2, world_dimensions[1]-6, 12):
-            if random.random() > 0.99:
-                y = Sprite(sprite_size[0], sprite_size[1], i, j, 'food_sprite')
-            else:
-                y = Sprite(sprite_size[0], sprite_size[1], i, j, 'base_sprite')
-            all_sprites_list.add(y)
-            sprite_dict.update({(y.rect[0], y.rect[1]): y})
 
     P1Hyphae.rect.x = 470
     P1Hyphae.rect.y = 470

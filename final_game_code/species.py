@@ -8,30 +8,30 @@ from trait_tree import DurableTraitTree, PoisonTraitTree, SlimeTraitTree
 
 class DurableFungiSpecies(DurableHyphae, DurableSpriteGroup):
     # this class will contain the species object
-    def __init__(self, DurableSpriteTraits, DurableTraitTree):
+    def __init__(self, sprite_traits = DurableSpriteTraits, trait_tree = DurableTraitTree):
         super().__init__()
-        self.traits = DurableSpriteTraits
-        self.trait_tree = DurableTraitTree
+        self.traits = sprite_traits
+        self.trait_tree = trait_tree
 
     def move_hyphae(self):
         self.add(pygame.get_sprite_at(self.move()))
 
 class PoisonFungiSpecies(PoisonHyphae, PoisonSpriteGroup):
     # this class will contain the species object
-    def __init__(self, PoisonSpriteTraits, PoisonTraitTree):
+    def __init__(self, sprite_traits = PoisonSpriteTraits, trait_tree = PoisonTraitTree):
         super().__init__()
-        self.traits = PoisonSpriteTraits
-        self.trait_tree = PoisonTraitTree
+        self.traits = sprite_traits
+        self.trait_tree = trait_tree
 
     def move_hyphae(self):
         self.add(pygame.get_sprite_at(self.move()))
 
 class SlimeMoldSpecies(SlimeHyphae, SlimeSpriteGroup):
     # this class will contain the species object
-    def __init__(self, SlimeSpriteTraits, SlimeTraitTree):
+    def __init__(self, sprite_traits = SlimeSpriteTraits, trait_tree = SlimeTraitTree):
         super().__init__()
-        self.traits = SlimeSpriteTraits
-        self.trait_tree = SlimeTraitTree
+        self.traits = sprite_traits
+        self.trait_tree = trait_tree
 
     def move_hyphae(self):
         self.add(pygame.get_sprite_at(self.move()))
