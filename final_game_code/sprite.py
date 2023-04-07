@@ -80,7 +80,7 @@ class ChitinSprite(BaseSprite):
 
 class PoisonSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
-        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,100,0))
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,0,255))
 
     def getAttributes(self, kind):   
         None
@@ -98,7 +98,7 @@ class ExplosiveSprite(BaseSprite):
     def grow(self):
         None 
 
-class SlimeSorite(BaseSprite):
+class SlimeSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
 

@@ -5,7 +5,7 @@ from pygame.sprite import Group
 from pygame.time import Clock
 from sprite import FoodSprite, NeutralSprite, ImpassSprite, DurableSprite
 from species import DurableFungiSpecies, PoisonFungiSpecies, SlimeMoldSpecies
-from player import Player
+from player import DurablePlayer, PoisonPlayer, SlimePlayer
 # this class will generate the world for the game
 
 class World():
@@ -59,21 +59,30 @@ class World():
 
     def generate_players(self):
         if self.player1species == 0:
-            Player1 = Player(DurableFungiSpecies)
+            Player1 = DurablePlayer()
         elif self.player1species == 1:
-            Player1 = Player(PoisonFungiSpecies)
+            Player1 = PoisonPlayer()
         else:
-            Player1 = Player(SlimeMoldSpecies)
+            Player1 = SlimePlayer()
 
         if self.player2species == 0:
-            Player2 = Player(DurableFungiSpecies)
+            Player2 = DurablePlayer()
         elif self.player2species == 1:
-            Player2 = Player(PoisonFungiSpecies)
+            Player2 = PoisonPlayer()
         else:
-            Player2 = Player(SlimeMoldSpecies)
+            Player2 = SlimePlayer()
         
         return Player1, Player2
     
     def draw_players(self, Player1, Player2):
         if random.random() > 0.5:
-            Player1
+            p1start = [2, 2]
+            p2start = [self.dimensions[0] - 2 - self.sprite_size[0], self.dimensions[1] - 2 - self.sprite_size[1]]
+        else:
+            p1start = [self.dimensions[0] - 2 - self.sprite_size[0], self.dimensions[1] - 2 - self.sprite_size[1]]
+            p2start = [2, 2]
+        
+        P1StartSprite = Player1.base_sprite(p1start[0], p1start[1], self.sprite_size[0], self.sprite_size[1], Player1.base_traits.attack_score, Player1.base_traits.defense_score, Player1.base_traits.growth_rate)
+        P2StartSprite = Player2.base_sprite(p2start[0], p2start[1], self.sprite_size[0], self.sprite_size[1], Player2.base_traits.attack_score, Player2.base_traits.defense_score, Player2.base_traits.growth_rate)
+        self.all_sprites.add(P1StartSprite)
+        self.all_sprites.add(P2StartSprite)
