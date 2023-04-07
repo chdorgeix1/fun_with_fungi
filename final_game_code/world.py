@@ -32,12 +32,12 @@ class World():
         
     def generate_map(self):
         self.map = pygame.display.set_mode(self.dimensions)
-        self.map.fill((200,200,200))
+        self.map.fill((50,50,50))
 
     def draw_sprites(self):
         for i in range(2, self.dimensions[0], 2 + self.sprite_size[0]):
             for j in range(2, self.dimensions[1], 2 + self.sprite_size[1]):
-                if random.random() < 0.59:
+                if random.random() < 0.95:
                     y = NeutralSprite(i, j, self.sprite_size[0], self.sprite_size[1])
                 else:
                     y = FoodSprite(i, j, self.sprite_size[0], self.sprite_size[1])
@@ -74,47 +74,6 @@ class World():
         
         return Player1, Player2
     
-    def draw_players():
+    def draw_players(self, Player1, Player2):
         if random.random() > 0.5:
-            
-    
-
-
-def generateWorld(world_dimensions, player1species, player2species):
-
-
-    P1Hyphae.rect.x = 470
-    P1Hyphae.rect.y = 470
-
-    P2Hyphae.rect.x = 26
-    P2Hyphae.rect.y = 26
-
-    sprite1 = sprite_dict[470,470]      
-
-    sprite2 = sprite_dict[26,26]      
-
-    if player1species == 0:
-        sprite1.setKind('durable_sprite_1')
-
-    if player1species == 1:
-        sprite1.setKind('slime_sprite_1')
-
-    if player1species == 2:
-        sprite1.setKind('poison_sprite_1')
-
-    if player2species == 0:
-        sprite2.setKind('durable_sprite_2')
-
-    if player2species == 1:
-        sprite2.setKind('slime_sprite_2')
-
-    if player2species == 2:
-        sprite2.setKind('poison_sprite_2')
-
-    all_sprites_list.add(sprite1)
-    all_sprites_list.add(P1Hyphae)
-    all_sprites_list.add(sprite2)
-    all_sprites_list.add(P2Hyphae)
-    pygame.init()
-
-    return all_sprites_list, sample_surface, P1Hyphae, P2Hyphae
+            Player1

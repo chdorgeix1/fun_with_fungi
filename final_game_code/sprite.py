@@ -49,8 +49,8 @@ class FoodSprite(BaseSprite):
         None 
 
 class ImpassSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 0, defense_score = 1000): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (92, 64, 51))
+    def __init__(self, x_loc, y_loc, height, width, attack_score = 0, defense_score = 1000): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (92, 64, 51))
 
     def getAttributes(self, kind):   
         None
@@ -59,8 +59,8 @@ class ImpassSprite(BaseSprite):
         None 
 
 class DurableSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 15, defense_score = 15): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (0,100,0))
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,100,0))
 
     def getAttributes(self, kind):   
         None
@@ -69,8 +69,8 @@ class DurableSprite(BaseSprite):
         None 
 
 class ChitinSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 25, defense_score = 50): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (0,200,0))
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
 
     def getAttributes(self, kind):   
         None
@@ -79,8 +79,8 @@ class ChitinSprite(BaseSprite):
         None 
 
 class PoisonSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 15, defense_score = 15): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (0,100,0))
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,100,0))
 
     def getAttributes(self, kind):   
         None
@@ -88,9 +88,19 @@ class PoisonSprite(BaseSprite):
     def grow(self):
         None 
 
-class ChitinSprite(BaseSprite):
-    def __init__(self, x_loc, y_loc, attack_score = 25, defense_score = 50): 
-        super().__init__(x_loc, y_loc, attack_score, defense_score, 10, 10, (0,200,0))
+class ExplosiveSprite(BaseSprite):
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
+
+    def getAttributes(self, kind):   
+        None
+    
+    def grow(self):
+        None 
+
+class SlimeSorite(BaseSprite):
+    def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
+        super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
 
     def getAttributes(self, kind):   
         None
