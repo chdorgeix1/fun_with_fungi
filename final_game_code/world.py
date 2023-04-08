@@ -88,9 +88,15 @@ class World():
             p1start = [self.dimensions[0] - 2 - self.sprite_size[0], self.dimensions[1] - 2 - self.sprite_size[1]]
             p2start = [2, 2]
         
-        P1StartSprite = Player1.base_sprite(p1start[0], p1start[1], self.sprite_size[0], self.sprite_size[1], Player1.base_traits.attack_score, Player1.base_traits.defense_score, Player1.base_traits.growth_rate)
-        P2StartSprite = Player2.base_sprite(p2start[0], p2start[1], self.sprite_size[0], self.sprite_size[1], Player2.base_traits.attack_score, Player2.base_traits.defense_score, Player2.base_traits.growth_rate)
+        Player1.base_traits.growth_rate = 0.06
+
+        P1StartSprite = Player1.base_sprite(p1start[0], p1start[1], self.sprite_size[0], self.sprite_size[1], Player1.base_traits.attack_score, Player1.base_traits.defense_score, Player1.base_traits.growth_rate, color = (0,100,0))
+        P2StartSprite = Player2.base_sprite(p2start[0], p2start[1], self.sprite_size[0], self.sprite_size[1], Player2.base_traits.attack_score, Player2.base_traits.defense_score, Player2.base_traits.growth_rate, color = (100, 0, 0))
+        
+        print(P1StartSprite.color)
+        
         Player1.group.add(P1StartSprite)
+        Player2.group.add(P2StartSprite)
         
         self.all_sprites.add(P1StartSprite)
         self.all_sprites.add(P2StartSprite)

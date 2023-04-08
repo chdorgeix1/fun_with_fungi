@@ -6,7 +6,7 @@ import hyphae
 import species
 from world import World
 
-new_world = World('small', 0, 1)
+new_world = World('large', 0, 0)
 
 new_world.generate_dimensions()
 
@@ -30,6 +30,8 @@ while not exit:
     
     Player1.group.group_grow(sprite_dict = new_world.sprite_dict, all_sprites = new_world.all_sprites)
 
+    Player2.group.group_grow(sprite_dict = new_world.sprite_dict, all_sprites = new_world.all_sprites)
+
     new_world.all_sprites.draw(new_world.map)
         #new_world.map.fill((0,200,200))
 
@@ -40,4 +42,4 @@ while not exit:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_x:
                 exit = True
-    new_world.clock.tick(10)
+    new_world.clock.tick(2)

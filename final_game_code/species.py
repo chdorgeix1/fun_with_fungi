@@ -15,7 +15,7 @@ class DurableFungiSpecies(DurableHyphae):
         self.group = DurableSpriteGroup()
         self.base_sprite = DurableSprite
         self.extra_sprite = ChitinSprite
-        self.base_traits = DurableSpriteTraits
+        self.base_traits = DurableSpriteTraits()
         self.extra_traits = ChitinSpriteTraits
         self.trait_tree = DurableTraitTree
 
