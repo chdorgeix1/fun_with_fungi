@@ -25,7 +25,7 @@ class BaseSprite(ABC, Sprite):
         None
     
     @abstractmethod
-    def grow(self):
+    def grow(self, sprite_dict):
         None 
 
 class NeutralSprite(BaseSprite):
@@ -35,7 +35,7 @@ class NeutralSprite(BaseSprite):
     def getAttributes(self, kind):   
         None
     
-    def grow(self):
+    def grow(self, sprite_dict):
         None 
 
 class FoodSprite(BaseSprite):
@@ -45,7 +45,7 @@ class FoodSprite(BaseSprite):
     def getAttributes(self, kind):   
         None
     
-    def grow(self):
+    def grow(self, sprite_dict):
         None 
 
 class ImpassSprite(BaseSprite):
@@ -55,22 +55,38 @@ class ImpassSprite(BaseSprite):
     def getAttributes(self, kind):   
         None
     
-    def grow(self):
+    def grow(self, sprite_dict):
         None 
 
 class DurableSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,100,0))
+        self.growth_rate = growth_rate
 
     def getAttributes(self, kind):   
         None
     
-    def grow(self):
-        None 
+    def grow(self, sprite_dict, all_sprites, self_group):
+        for i in range(-self.width - 2, 2 * (self.width + 2), self.width + 2):
+            for j in range(-self.height - 2, 2 * (self.height + 2), self.height + 2):
+                print(i,j)
+                if (self.x_loc + i, self.y_loc + j) in sprite_dict:
+                    new_sprite = sprite_dict[(self.x_loc + i, self.y_loc + j)]
+                    if new_sprite not in self_group:
+                        if random.random() < 0.3:
+                            new_sprite.kill()
+                            grow_sprite = DurableSprite(self.x_loc + i, self.y_loc + j, self.height, self.width, self.attack_score, self.defense_score, self.growth_rate)
+                            sprite_dict[(self.x_loc + i,self.y_loc + j)] = grow_sprite
+                            self_group.add(grow_sprite)
+                            all_sprites.add(grow_sprite)
+
+        
+
 
 class ChitinSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
+        self.growth_rate = growth_rate
 
     def getAttributes(self, kind):   
         None
@@ -81,6 +97,7 @@ class ChitinSprite(BaseSprite):
 class PoisonSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,0,255))
+        self.growth_rate = growth_rate
 
     def getAttributes(self, kind):   
         None
@@ -91,6 +108,7 @@ class PoisonSprite(BaseSprite):
 class ExplosiveSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
+        self.growth_rate = growth_rate
 
     def getAttributes(self, kind):   
         None
@@ -101,6 +119,7 @@ class ExplosiveSprite(BaseSprite):
 class SlimeSprite(BaseSprite):
     def __init__(self, x_loc, y_loc, height, width, attack_score, defense_score, growth_rate): 
         super().__init__(x_loc, y_loc, height, width, attack_score, defense_score, (0,200,0))
+        self.growth_rate = growth_rate
 
     def getAttributes(self, kind):   
         None

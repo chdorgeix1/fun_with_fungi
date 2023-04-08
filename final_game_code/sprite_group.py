@@ -17,9 +17,10 @@ class DurableSpriteGroup(BaseGroup):
     def __init__(self):
         super().__init__()
 
-    def group_grow(self):
-        for sprite in self.sprites():
-            sprite.grow()
+    def group_grow(self, sprite_dict, all_sprites):
+        print('here1')
+        for growing_sprites in self:
+            growing_sprites.grow(sprite_dict, all_sprites, self)
 
 class PoisonSpriteGroup(BaseGroup):
     def __init__(self):

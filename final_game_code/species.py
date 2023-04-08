@@ -8,10 +8,11 @@ from trait_tree import DurableTraitTree, PoisonTraitTree, SlimeTraitTree
 from sprite import DurableSprite, PoisonSprite, SlimeSprite, ExplosiveSprite, ChitinSprite
 
 
-class DurableFungiSpecies(DurableHyphae, DurableSpriteGroup):
+class DurableFungiSpecies(DurableHyphae):
     # this class will contain the species object
     def __init__(self):
         super().__init__()
+        self.group = DurableSpriteGroup()
         self.base_sprite = DurableSprite
         self.extra_sprite = ChitinSprite
         self.base_traits = DurableSpriteTraits

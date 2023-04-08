@@ -6,6 +6,7 @@ from pygame.time import Clock
 from sprite import FoodSprite, NeutralSprite, ImpassSprite, DurableSprite
 from species import DurableFungiSpecies, PoisonFungiSpecies, SlimeMoldSpecies
 from player import DurablePlayer, PoisonPlayer, SlimePlayer
+
 # this class will generate the world for the game
 
 class World():
@@ -13,6 +14,7 @@ class World():
         self.world_size = world_size
         self.dimensions = []
         self.sprite_size = []
+        self.sprite_dict = {}
         self.player1species = player1species
         self.player2species = player2species
         self.all_sprites = Group()
@@ -34,6 +36,9 @@ class World():
         self.map = pygame.display.set_mode(self.dimensions)
         self.map.fill((50,50,50))
 
+    def update_sprite_dict(self, sprite):
+        self.sprite_dict.update({(sprite.rect[0], sprite.rect[1]): sprite})
+
     def draw_sprites(self):
         for i in range(2, self.dimensions[0], 2 + self.sprite_size[0]):
             for j in range(2, self.dimensions[1], 2 + self.sprite_size[1]):
@@ -42,6 +47,7 @@ class World():
                 else:
                     y = FoodSprite(i, j, self.sprite_size[0], self.sprite_size[1])
                 self.all_sprites.add(y)
+                self.update_sprite_dict(y)
             
     def draw_impass(self):
         x_list = list(range(2, self.dimensions[0] + 2 + self.sprite_size[0], 2 + self.sprite_size[0]))
@@ -84,5 +90,11 @@ class World():
         
         P1StartSprite = Player1.base_sprite(p1start[0], p1start[1], self.sprite_size[0], self.sprite_size[1], Player1.base_traits.attack_score, Player1.base_traits.defense_score, Player1.base_traits.growth_rate)
         P2StartSprite = Player2.base_sprite(p2start[0], p2start[1], self.sprite_size[0], self.sprite_size[1], Player2.base_traits.attack_score, Player2.base_traits.defense_score, Player2.base_traits.growth_rate)
+        Player1.group.add(P1StartSprite)
+        
         self.all_sprites.add(P1StartSprite)
         self.all_sprites.add(P2StartSprite)
+        self.update_sprite_dict(P1StartSprite)
+        self.update_sprite_dict(P2StartSprite)
+
+
