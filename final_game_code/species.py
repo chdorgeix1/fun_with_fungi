@@ -22,13 +22,14 @@ class DurableFungiSpecies(DurableHyphae):
     def move_hyphae(self):
         self.add(pygame.get_sprite_at(self.move()))
 
-class PoisonFungiSpecies(PoisonHyphae, PoisonSpriteGroup):
+class PoisonFungiSpecies(PoisonHyphae):
     # this class will contain the species object
     def __init__(self):
         super().__init__()
+        self.group = PoisonSpriteGroup()
         self.base_sprite = PoisonSprite
         self.extra_sprite = ExplosiveSprite
-        self.base_traits = PoisonSpriteTraits
+        self.base_traits = PoisonSpriteTraits()
         self.extra_traits = ExplosiveSpriteTraits
         self.trait_tree = PoisonTraitTree
 
@@ -39,8 +40,9 @@ class SlimeMoldSpecies(SlimeHyphae, SlimeSpriteGroup):
     # this class will contain the species object
     def __init__(self):
         super().__init__()
+        self.group = SlimeSpriteGroup()
         self.base_sprite = SlimeSprite
-        self.base_traits = SlimeSpriteTraits
+        self.base_traits = SlimeSpriteTraits()
         self.trait_tree = SlimeTraitTree
 
     def move_hyphae(self):

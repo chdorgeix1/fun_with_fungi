@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class DurableSpriteTraits():
     attack_score: int = 25
     defense_score: int = 25
-    growth_rate: float = 0.05
+    growth_rate: float = 0.7
 
 @dataclass
 class ChitinSpriteTraits():
@@ -18,7 +18,7 @@ class ChitinSpriteTraits():
 class PoisonSpriteTraits():
     attack_score: int = 15
     defense_score: int = 15
-    growth_rate: float = 0.75
+    growth_rate: float = 0.5
 
 @dataclass
 class ExplosiveSpriteTraits():
@@ -30,6 +30,6 @@ class ExplosiveSpriteTraits():
 class SlimeSpriteTraits():
     attack_score: int = 10
     defense_score: int = 10
-    growth_rate: float = 0.9
+    growth_rate: float = 0.1
 
 
